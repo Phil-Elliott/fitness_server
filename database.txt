@@ -1,0 +1,54 @@
+https://dbdiagram.io/d
+
+
+Table users {
+  id integer [pk, increment]
+  clerk_user_id varchar
+  email varchar [unique]
+  display_name varchar
+  created_at timestamp
+}
+
+Table routines {
+  id integer [pk, increment]
+  user_id integer [ref: > users.id] // foreign key reference to users table
+  name varchar
+  description text
+  created_at timestamp
+}
+
+Table workouts {
+  id integer [pk, increment]
+  routine_id integer [ref: > routines.id]
+  user_id integer [ref: > users.id]
+  date date
+  status text
+  created_at timestamp
+}
+
+Table exercises {
+  id integer [pk, increment]
+  name varchar
+  description text
+}
+
+Table workout_exercises {
+  id integer [pk, increment]
+  workout_id integer [ref: > workouts.id]
+  exercise_id integer [ref: > exercises.id]
+  order_index integer
+  // Additional attributes specific to the exercise in the context of the workout
+}
+
+Table exercise_sets {
+  id integer [pk, increment]
+  workout_exercise_id integer [ref: > workout_exercises.id]
+  set_number integer
+  repetitions integer
+  weight float
+  user_input text  // Any additional data the user inputs for the set
+  created_at timestamp
+}
+
+
+

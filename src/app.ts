@@ -10,6 +10,13 @@ import {
   securityMiddleware,
 } from "./middlewares";
 
+import pool from "./config/database";
+import routineRoutes from "./routes/routineRoutes";
+import exerciseRoutes from "./routes/exerciseRoutes";
+import userRoutes from "./routes/userRoutes";
+import workoutExerciseRoutes from "./routes/workoutExerciseRoutes";
+import workoutRoutes from "./routes/workoutRoutes";
+
 dotenv.config({ path: "./config.env" });
 
 const app = express();
@@ -22,9 +29,11 @@ securityMiddleware(app);
 app.use(cookieParser());
 
 // ROUTES
-app.get("/", (req, res) => {
-  res.send("Welcome to my server!");
-});
+app.use("/api/v1/", exerciseRoutes);
+app.use("/api/v1/", routineRoutes);
+app.use("/api/v1/", userRoutes);
+app.use("/api/v1/", workoutExerciseRoutes);
+app.use("/api/v1/", workoutRoutes);
 
 // 404 route
 app.all("*", (req, res, next) => {
