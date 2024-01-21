@@ -9,3 +9,11 @@
 3) Start building out routes
    - Get the auth working
    - Do tests as you go (make sure works with first route you write)
+
+
+
+
+
+
+clerk 
+- https://clerk.com/blog/how-to-authenticate-api-requests-with-clerk-express
