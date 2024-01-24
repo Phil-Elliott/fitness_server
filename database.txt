@@ -24,7 +24,7 @@ Table workouts {
   date date
   status text
   created_at timestamp
-}
+} 
 
 Table exercises {
   id integer [pk, increment]

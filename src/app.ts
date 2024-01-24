@@ -23,7 +23,7 @@ securityMiddleware(app);
 app.use(cookieParser());
 
 // ROUTES
-app.use("/api/v1/", ClerkExpressRequireAuth);
+// app.use("/api/v1/", ClerkExpressRequireAuth);
 app.use("/api/v1/user", routes.userRoutes);
 app.use("/api/v1/routine", routes.routineRoutes);
 app.use("/api/v1/workout", routes.workoutRoutes);
