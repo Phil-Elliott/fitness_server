@@ -1,1 +1,1 @@
-import pool from "../config/database";
+import pool from "../database/setup";

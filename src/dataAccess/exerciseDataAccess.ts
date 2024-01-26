@@ -1,4 +1,4 @@
-import pool from "../config/database";
+import db from "../database/setup";
 import buildUpdateQuery from "../utils/buildUpdateQuery";
 
 type Exercise = {
@@ -8,19 +8,17 @@ type Exercise = {
 };
 
 export const getAllExercises = async () => {
-  const result = await pool.query("SELECT * FROM exercises");
+  const result = await db.query("SELECT * FROM exercises");
   return result.rows;
 };
 
 export const getExercise = async (id: string) => {
-  const result = await pool.query("SELECT * FROM exercises WHERE id = $1", [
-    id,
-  ]);
+  const result = await db.query("SELECT * FROM exercises WHERE id = $1", [id]);
   return result.rows[0];
 };
 
 export const createExercise = async (exerciseData: Exercise) => {
-  const result = await pool.query(
+  const result = await db.query(
     "INSERT INTO exercises (name, description) VALUES ($1, $2) RETURNING *",
     [exerciseData.name, exerciseData.description]
   );
@@ -28,7 +26,7 @@ export const createExercise = async (exerciseData: Exercise) => {
 };
 
 export const updateExercise = async (id: string, exerciseData: Exercise) => {
-  const idResult = await pool.query("SELECT id FROM exercises WHERE id = $1", [
+  const idResult = await db.query("SELECT id FROM exercises WHERE id = $1", [
     id,
   ]);
   if (idResult.rows.length === 0) {
@@ -41,10 +39,10 @@ export const updateExercise = async (id: string, exerciseData: Exercise) => {
     "id",
     id
   );
-  const result = await pool.query(query, params);
+  const result = await db.query(query, params);
   return result.rows[0];
 };
 
 export const deleteExercise = async (id: string) => {
-  return pool.query("DELETE FROM exercises WHERE id = $1", [id]);
+  return db.query("DELETE FROM exercises WHERE id = $1", [id]);
 };

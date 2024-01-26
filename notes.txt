@@ -21,8 +21,8 @@ clerk
 
 
 
-Finish routes
-add to github (multiple commits)
+
+
 connect to clerk
 add tests
 maybe clean up a bit
