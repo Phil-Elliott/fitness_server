@@ -7,7 +7,9 @@
     "start": "nodemon --exec ts-node src/server.ts",
     "start:prod": "node build/server.ts",
     "build": "tsc",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "cross-env NODE_ENV=test jest",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:push": "drizzle-kit push:pg"
   },
   "author": "",
   "license": "ISC",

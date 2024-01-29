@@ -1,22 +1,22 @@
 import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
-import { exercise } from "./exerciseSchema";
-import { workout } from "./workoutSchema";
+import { exercises } from "./exerciseSchema";
+import { workouts } from "./workoutSchema";
 
-export const workoutExercise = pgTable("workoutExercise", {
+export const workoutExercises = pgTable("workoutExercises", {
   id: serial("id").primaryKey(),
   workout_id: integer("workout_id")
-    .references(() => workout.id)
+    .references(() => workouts.id)
     .notNull(),
   exercise_id: integer("exercise_id")
-    .references(() => exercise.id)
+    .references(() => exercises.id)
     .notNull(),
   order_index: integer("order_index"),
 });
 
-export const workoutExerciseSet = pgTable("workoutExerciseSet", {
+export const workoutExerciseSets = pgTable("workoutExerciseSets", {
   id: serial("id").primaryKey(),
   workout_exercise_id: integer("workout_exercise_id")
-    .references(() => workoutExercise.id)
+    .references(() => workoutExercises.id)
     .notNull(),
   set_number: integer("set_number"),
   repetitions: integer("repetitions"),
