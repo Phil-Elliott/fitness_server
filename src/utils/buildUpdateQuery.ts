@@ -1,28 +1,24 @@
-type QueryParams = (string | number)[];
+import { sql } from "drizzle-orm";
 
 function buildUpdateQuery(
   table: string,
   data: Record<string, any>,
   idField: string,
   idValue: string | number
-): { query: string; params: QueryParams } {
-  let query = `UPDATE ${table} SET `;
-  const params: QueryParams = [];
-  let paramIndex = 1;
-
-  Object.entries(data).forEach(([key, value]) => {
+) {
+  let setParts = [];
+  for (const [key, value] of Object.entries(data)) {
     if (value !== null && value !== undefined) {
-      query += `${key} = $${paramIndex}, `;
-      params.push(value);
-      paramIndex++;
+      setParts.push(sql`${sql.raw(key)} = ${value}`);
     }
-  });
+  }
 
-  query = query.slice(0, -2);
-  query += ` WHERE ${idField} = $${paramIndex} RETURNING *`;
-  params.push(idValue);
+  const setClause = sql.join(setParts, sql.raw(", "));
 
-  return { query, params };
+  return () =>
+    sql`UPDATE ${sql.raw(table)} SET ${setClause} WHERE ${sql.raw(
+      idField
+    )} = ${idValue} RETURNING *`;
 }
 
 export default buildUpdateQuery;
