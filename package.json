@@ -10,8 +10,8 @@
     "test": "cross-env NODE_ENV=test jest",
     "db:generate": "drizzle-kit generate:pg",
     "db:push": "drizzle-kit push:pg",
-    "db:test:generate": "cross-env NODE_ENV=test drizzle-kit generate:pg",
-    "db:test:push": "cross-env NODE_ENV=test drizzle-kit push:pg"
+    "db:test:push": "cross-env NODE_ENV=test drizzle-kit push:pg",
+    "db:update": "npm run db:generate && npm run db:push && npm run db:test:push"
   },
   "author": "",
   "license": "ISC",
