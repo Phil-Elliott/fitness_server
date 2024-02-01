@@ -1,5 +1,4 @@
 import db from "../database/setup";
-import { exercises } from "../database/schema/exerciseSchema";
 import { sql } from "drizzle-orm";
 
 import buildUpdateQuery from "../utils/buildUpdateQuery";
