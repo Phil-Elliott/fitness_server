@@ -1,5 +1,6 @@
 import db from "../database/setup";
 import { sql } from "drizzle-orm";
+import AppError from "../utils/appError";
 
 import buildUpdateQuery from "../utils/buildUpdateQuery";
 
@@ -18,6 +19,10 @@ export const getExercise = async (id: string) => {
   const result = await db.execute(
     sql`SELECT * FROM exercises WHERE id = ${id}`
   );
+  if (result.rows.length === 0) {
+    throw new AppError(`Exercise with ID ${id} does not exist.`, 404);
+  }
+
   return result.rows[0];
 };
 
@@ -33,7 +38,7 @@ export const updateExercise = async (id: string, exerciseData: Exercise) => {
     sql`SELECT id FROM exercises WHERE id = ${id}`
   );
   if (idResult.rows.length === 0) {
-    throw new Error(`Exercise with ID ${id} does not exist.`);
+    throw new AppError(`Exercise with ID ${id} does not exist.`, 404);
   }
 
   const updateQuery = buildUpdateQuery("exercises", exerciseData, "id", id);
@@ -43,6 +48,14 @@ export const updateExercise = async (id: string, exerciseData: Exercise) => {
 };
 
 export const deleteExercise = async (id: string) => {
+  const idResult = await db.execute(
+    sql`SELECT id FROM exercises WHERE id = ${id}`
+  );
+
+  if (idResult.rows.length === 0) {
+    throw new AppError(`Exercise with ID ${id} does not exist.`, 404);
+  }
+
   await db.execute(sql`DELETE FROM exercises WHERE id = ${id}`);
   return;
 };
