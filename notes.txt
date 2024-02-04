@@ -1,14 +1,4 @@
-1) Add testing
-- Practice writing unit tests
-- Practice writing intergration tests
-    - White a script to delete the test data and after the test is run or before the test is run
-
-2) Connect clerk
-
-
-3) Start building out routes
-   - Get the auth working
-   - Do tests as you go (make sure works with first route you write)
+Write out all the routes 
 
 
 
@@ -17,19 +7,3 @@
 
 clerk 
 - https://clerk.com/blog/how-to-authenticate-api-requests-with-clerk-express
-
-
-
-
-
-
-connect to clerk
-add tests
-maybe clean up a bit
-add more constraints in sql and in code like what was done with update
-also maybe this (
-    if (!req.body || Object.keys(req.body).length === 0) {
-    return next(new Error("No data provided to update."));
-  }
-) can be used in other places so that you don't have to write the same code over and over again
-start practicing vim
