@@ -1,10 +1,5 @@
 import * as exerciseDataAccess from "../dataAccess/exerciseDataAccess";
-
-type Exercise = {
-  id?: string;
-  name: string;
-  description: string;
-};
+import { Exercise } from "../types/exerciseTypes";
 
 export const getAllExercises = async (): Promise<Exercise[]> => {
   return await exerciseDataAccess.getAllExercises();
