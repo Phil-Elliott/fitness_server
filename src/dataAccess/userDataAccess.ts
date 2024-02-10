@@ -19,10 +19,9 @@ export const getUser = async (id: string): Promise<User> => {
 
 export const createUser = async (userData: NewUser): Promise<User> => {
   const result = await db.execute(
-    sql`INSERT INTO users (clerk_user_id, display_name, email) VALUES (${userData.clerk_user_id}, ${userData.display_name}, ${userData.email}) RETURNING *`
+    sql`INSERT INTO users (clerk_user_id, display_name, email, created_at) VALUES (${userData.clerk_user_id}, ${userData.display_name}, ${userData.email}, NOW()) RETURNING *`
   );
 
-  console.log(result.rows[0]);
   return result.rows[0] as User;
 };
 
@@ -39,11 +38,14 @@ export const updateUser = async (
   return result.rows[0] as User;
 };
 
+// deletes a user and deletes all routines associated with that user
 export const deleteUser = async (id: string): Promise<void> => {
   const idResult = await db.execute(sql`SELECT id FROM users WHERE id = ${id}`);
   if (idResult.rows.length === 0) {
     throw new AppError(`User with ID ${id} does not exist.`, 404);
   }
+
+  await db.execute(sql`DELETE FROM routines WHERE user_id = ${id}`);
 
   await db.execute(sql`DELETE FROM users WHERE id = ${id}`);
   return;

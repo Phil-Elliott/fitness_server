@@ -37,7 +37,7 @@ export const updateRoutine = async (
   if (idResult.rows.length === 0) {
     throw new AppError(`Routine with ID ${id} does not exist.`, 404);
   }
-  const updateQuery = buildUpdateQuery("Routines", RoutineData, "id", id);
+  const updateQuery = buildUpdateQuery("routines", RoutineData, "id", id);
   const result = await db.execute(updateQuery());
   return result.rows[0] as Routine;
 };

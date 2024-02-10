@@ -1,14 +1,8 @@
 import db from "../database/setup";
 import { sql } from "drizzle-orm";
 import AppError from "../utils/appError";
-
 import buildUpdateQuery from "../utils/buildUpdateQuery";
-
-type Exercise = {
-  id?: string;
-  name: string;
-  description: string;
-};
+import { Exercise } from "../types/exerciseTypes";
 
 export const getAllExercises = async (): Promise<Exercise[]> => {
   const result = await db.execute(sql`SELECT * FROM exercises`);
