@@ -16,7 +16,7 @@ function buildUpdateQuery(
   const setClause = sql.join(setParts, sql.raw(", "));
 
   return () =>
-    sql`UPDATE ${sql.raw(table)} SET ${setClause} WHERE ${sql.raw(
+    sql`UPDATE "${sql.raw(table)}" SET ${setClause} WHERE ${sql.raw(
       idField
     )} = ${idValue} RETURNING *`;
 }
