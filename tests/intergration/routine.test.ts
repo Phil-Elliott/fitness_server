@@ -32,7 +32,7 @@ describe("Routine Routes", () => {
   ];
 
   describe("GET /api/v1/routine", () => {
-    it("should return all Routines", async () => {
+    it("should return all routines", async () => {
       const response = await request(app).get("/api/v1/routine");
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject(routineData);
@@ -41,7 +41,7 @@ describe("Routine Routes", () => {
   });
 
   describe("GET /api/v1/routine/:id", () => {
-    it("should return a single Routine", async () => {
+    it("should return a single routine", async () => {
       const response = await request(app).get(`/api/v1/routine/${id}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject({
@@ -84,7 +84,7 @@ describe("Routine Routes", () => {
         description: "A routine to do new things",
       };
       const response = await request(app)
-        .patch(`/api/v1/Routine/${id}`)
+        .patch(`/api/v1/routine/${id}`)
         .send(updatedRoutine);
       expect(response.statusCode).toBe(200);
       expect(response.body.routine).toMatchObject({

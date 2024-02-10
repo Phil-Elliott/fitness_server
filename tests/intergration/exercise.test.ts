@@ -123,7 +123,6 @@ describe("Exercise Routes", () => {
 
     it("exercise should no longer exist after being deleted", async () => {
       const response = await request(app).get(`/api/v1/exercise/${id}`);
-      console.log(response.body, "response");
       expect(response.statusCode).toBe(404);
     });
 

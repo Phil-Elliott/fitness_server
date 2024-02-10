@@ -3,6 +3,8 @@ import app from "../../src/app";
 import { expect, describe, it, beforeAll, afterAll } from "vitest";
 import setupUserTableForTestDatabase from "../../scripts/user/setupTests";
 import teardownUserTableForTestDatabase from "../../scripts/user/teardownTests";
+import db from "../../src/database/setup";
+import { sql } from "drizzle-orm";
 
 describe("User Routes", () => {
   beforeAll(async () => {
@@ -119,14 +121,26 @@ describe("User Routes", () => {
   });
 
   describe("DELETE /api/v1/user/:id", () => {
-    it("should delete an user", async () => {
+    let routineId: string;
+
+    it("should delete a user", async () => {
+      let routine = await db.execute(
+        sql`INSERT INTO users (clerk_user_id, email, display_name) VALUES ('73543', 'matStone@gmail.com', 'Mat Stone') RETURNING *`
+      );
+      routineId = routine.rows[0].id as string;
+
       const response = await request(app).delete(`/api/v1/user/${id}`);
       expect(response.statusCode).toBe(204);
     });
 
+    it("should delete all routines associated with the user", async () => {
+      const response = await request(app).get(`/api/v1/routine/${routineId}`);
+
+      expect(response.statusCode).toBe(404);
+    });
+
     it("user should no longer exist after being deleted", async () => {
       const response = await request(app).get(`/api/v1/user/${id}`);
-      console.log(response.body, "response");
       expect(response.statusCode).toBe(404);
     });
 
