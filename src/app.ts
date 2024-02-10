@@ -29,6 +29,7 @@ app.use("/api/v1/routine", routes.routineRoutes);
 app.use("/api/v1/workout", routes.workoutRoutes);
 app.use("/api/v1/workoutExercise", routes.workoutExerciseRoutes);
 app.use("/api/v1/exercise", routes.exerciseRoutes);
+app.use("/api/v1/workoutExerciseSet", routes.workoutExerciseSetRoutes);
 
 // Clerk's error handler
 app.use((err: any, req: any, res: any, next: any) => {
