@@ -3,11 +3,11 @@ import db from "../../src/database/setup";
 
 async function setupRoutineTableForTestDatabase() {
   try {
-    let response = await db.execute(
+    const response = await db.execute(
       sql`INSERT INTO users (clerk_user_id, email, display_name) VALUES ('73543', 'johnBob@gmail.com', 'John Bob') RETURNING *`
     );
 
-    let id = response.rows[0].id;
+    const id = response.rows[0].id;
 
     await db.execute(
       sql`INSERT INTO routines (user_id, name, description, created_at) VALUES (${id}, 'Morning Routine', 'A routine to start the day', NOW());`
