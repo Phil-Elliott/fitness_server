@@ -3,6 +3,7 @@ export type User = {
   clerk_user_id: string;
   email: string;
   display_name: string;
+  created_at: string;
 };
 
 export type NewUser = {
