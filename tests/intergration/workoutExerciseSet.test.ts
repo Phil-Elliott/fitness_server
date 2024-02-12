@@ -6,6 +6,8 @@ import teardownWorkoutExerciseSetTableForTestDatabase from "../../scripts/workou
 import db from "../../src/database/setup";
 import { sql } from "drizzle-orm";
 
+const testJwt = process.env.CLERK_TEST_JWT;
+
 describe("WorkoutExerciseSet Routes", () => {
   beforeAll(async () => {
     await setupWorkoutExerciseSetTableForTestDatabase();
@@ -42,7 +44,9 @@ describe("WorkoutExerciseSet Routes", () => {
 
   describe("GET /api/v1/workoutExerciseSet", () => {
     it("should return all workoutExerciseSets", async () => {
-      const response = await request(app).get("/api/v1/workoutExerciseSet");
+      const response = await request(app)
+        .get("/api/v1/workoutExerciseSet")
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject(workoutExerciseSetData);
       id = response.body[0].id;
@@ -51,9 +55,9 @@ describe("WorkoutExerciseSet Routes", () => {
 
   describe("GET /api/v1/workoutExerciseSet/:id", () => {
     it("should return a single workoutExerciseSet", async () => {
-      const response = await request(app).get(
-        `/api/v1/workoutExerciseSet/${id}`
-      );
+      const response = await request(app)
+        .get(`/api/v1/workoutExerciseSet/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject({
         id: id,
@@ -99,6 +103,7 @@ describe("WorkoutExerciseSet Routes", () => {
       };
       const response = await request(app)
         .post("/api/v1/workoutExerciseSet")
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(newWorkoutExerciseSet);
       expect(response.statusCode).toBe(201);
 
@@ -124,6 +129,7 @@ describe("WorkoutExerciseSet Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/workoutExerciseSet/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedWorkoutExerciseSet);
       expect(response.statusCode).toBe(200);
       expect(response.body.set).toMatchObject({
@@ -138,6 +144,7 @@ describe("WorkoutExerciseSet Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/workoutExerciseSet/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedWorkoutExerciseSet);
       expect(response.statusCode).toBe(200);
       expect(response.body.set).toMatchObject({
@@ -160,6 +167,7 @@ describe("WorkoutExerciseSet Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/workoutExerciseSet/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedWorkoutExerciseSet);
       expect(response.statusCode).toBe(404);
     });
@@ -167,23 +175,23 @@ describe("WorkoutExerciseSet Routes", () => {
 
   describe("DELETE /api/v1/workoutExerciseSet/:id", () => {
     it("should delete a workoutExerciseSet", async () => {
-      const response = await request(app).delete(
-        `/api/v1/workoutExerciseSet/${id}`
-      );
+      const response = await request(app)
+        .delete(`/api/v1/workoutExerciseSet/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(204);
     });
 
     it("WorkoutExerciseSet should no longer exist after being deleted", async () => {
-      const response = await request(app).get(
-        `/api/v1/workoutExerciseSet/${id}`
-      );
+      const response = await request(app)
+        .get(`/api/v1/workoutExerciseSet/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(404);
     });
 
     it("should not delete a workoutExerciseSet that does not exist", async () => {
-      const response = await request(app).delete(
-        `/api/v1/workoutExerciseSet/123456789`
-      );
+      const response = await request(app)
+        .delete(`/api/v1/workoutExerciseSet/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(404);
     });
   });

@@ -1,4 +1,5 @@
 import express from "express";
+
 import * as exerciseController from "../controllers/exerciseController";
 
 const router = express.Router();

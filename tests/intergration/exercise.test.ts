@@ -4,6 +4,8 @@ import { expect, describe, it, beforeAll, afterAll } from "vitest";
 import setupExerciseTableForTestDatabase from "../../scripts/exercise/setupTests";
 import teardownExerciseTableForTestDatabase from "../../scripts/exercise/teardownTests";
 
+const testJwt = process.env.CLERK_TEST_JWT;
+
 describe("Exercise Routes", () => {
   beforeAll(async () => {
     await setupExerciseTableForTestDatabase();
@@ -32,7 +34,9 @@ describe("Exercise Routes", () => {
 
   describe("GET /api/v1/exercise", () => {
     it("should return all exercises", async () => {
-      const response = await request(app).get("/api/v1/exercise");
+      const response = await request(app)
+        .get("/api/v1/exercise")
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject(exerciseData);
       id = response.body[0].id;
@@ -41,7 +45,9 @@ describe("Exercise Routes", () => {
 
   describe("GET /api/v1/exercise/:id", () => {
     it("should return a single exercise", async () => {
-      const response = await request(app).get(`/api/v1/exercise/${id}`);
+      const response = await request(app)
+        .get(`/api/v1/exercise/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject({
         id: id,
@@ -59,6 +65,7 @@ describe("Exercise Routes", () => {
       };
       const response = await request(app)
         .post("/api/v1/exercise")
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(newExercise);
       expect(response.statusCode).toBe(201);
 
@@ -79,6 +86,7 @@ describe("Exercise Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/exercise/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedExercise);
       expect(response.statusCode).toBe(200);
       expect(response.body.exercise).toMatchObject({
@@ -94,6 +102,7 @@ describe("Exercise Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/exercise/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedExercise);
       expect(response.statusCode).toBe(200);
       expect(response.body.exercise).toMatchObject({
@@ -110,6 +119,7 @@ describe("Exercise Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/exercise/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedExercise);
       expect(response.statusCode).toBe(404);
     });
@@ -117,17 +127,23 @@ describe("Exercise Routes", () => {
 
   describe("DELETE /api/v1/exercise/:id", () => {
     it("should delete an exercise", async () => {
-      const response = await request(app).delete(`/api/v1/exercise/${id}`);
+      const response = await request(app)
+        .delete(`/api/v1/exercise/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(204);
     });
 
     it("exercise should no longer exist after being deleted", async () => {
-      const response = await request(app).get(`/api/v1/exercise/${id}`);
+      const response = await request(app)
+        .get(`/api/v1/exercise/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(404);
     });
 
     it("should not delete an exercise that does not exist", async () => {
-      const response = await request(app).delete(`/api/v1/exercise/123456789`);
+      const response = await request(app)
+        .delete(`/api/v1/exercise/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(404);
     });
   });

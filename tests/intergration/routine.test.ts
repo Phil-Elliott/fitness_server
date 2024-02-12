@@ -6,6 +6,8 @@ import teardownRoutineTableForTestDatabase from "../../scripts/routine/teardownT
 import db from "../../src/database/setup";
 import { sql } from "drizzle-orm";
 
+const testJwt = process.env.CLERK_TEST_JWT;
+
 describe("Routine Routes", () => {
   beforeAll(async () => {
     await setupRoutineTableForTestDatabase();
@@ -33,7 +35,9 @@ describe("Routine Routes", () => {
 
   describe("GET /api/v1/routine", () => {
     it("should return all routines", async () => {
-      const response = await request(app).get("/api/v1/routine");
+      const response = await request(app)
+        .get("/api/v1/routine")
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject(routineData);
       id = response.body[0].id;
@@ -42,7 +46,9 @@ describe("Routine Routes", () => {
 
   describe("GET /api/v1/routine/:id", () => {
     it("should return a single routine", async () => {
-      const response = await request(app).get(`/api/v1/routine/${id}`);
+      const response = await request(app)
+        .get(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject({
         id: id,
@@ -65,6 +71,7 @@ describe("Routine Routes", () => {
       };
       const response = await request(app)
         .post("/api/v1/routine")
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(newRoutine);
       expect(response.statusCode).toBe(201);
 
@@ -85,6 +92,7 @@ describe("Routine Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedRoutine);
       expect(response.statusCode).toBe(200);
       expect(response.body.routine).toMatchObject({
@@ -100,6 +108,7 @@ describe("Routine Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedRoutine);
       expect(response.statusCode).toBe(200);
       expect(response.body.routine).toMatchObject({
@@ -116,6 +125,7 @@ describe("Routine Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/routine/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedRoutine);
       expect(response.statusCode).toBe(404);
     });
@@ -123,17 +133,23 @@ describe("Routine Routes", () => {
 
   describe("DELETE /api/v1/routine/:id", () => {
     it("should delete a routine", async () => {
-      const response = await request(app).delete(`/api/v1/routine/${id}`);
+      const response = await request(app)
+        .delete(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(204);
     });
 
     it("routine should no longer exist after being deleted", async () => {
-      const response = await request(app).get(`/api/v1/routine/${id}`);
+      const response = await request(app)
+        .get(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(404);
     });
 
     it("should not delete a routine that does not exist", async () => {
-      const response = await request(app).delete(`/api/v1/routine/123456789`);
+      const response = await request(app)
+        .delete(`/api/v1/routine/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(404);
     });
   });

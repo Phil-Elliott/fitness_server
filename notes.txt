@@ -1,9 +1,26 @@
-Write out all the routes 
-
-
-
-
+- clean up tests and get working all together
 
 
 clerk 
 - https://clerk.com/blog/how-to-authenticate-api-requests-with-clerk-express
+
+
+
+ideas for later
+- add messaging and socket.io
+- add ai
+- gamify workouts or prorgress somehow
+- add a way to add friends and compete with them
+- add a way to add a workout buddy
+- add a way to add a trainer
+
+- could add a gym finder
+- could add a way to find a workout buddy at that gym if they are public
+- could add a way to find a trainer at that gym if they are public
+
+- start adding nutrition stuff
+
+- add some data analysis stuff
+- add some data visualization stuff
+
+- could see workouts and routines of others or popular ones

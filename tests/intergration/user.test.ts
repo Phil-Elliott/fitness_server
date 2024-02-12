@@ -6,6 +6,8 @@ import teardownUserTableForTestDatabase from "../../scripts/user/teardownTests";
 import db from "../../src/database/setup";
 import { sql } from "drizzle-orm";
 
+const testJwt = process.env.CLERK_TEST_JWT;
+
 describe("User Routes", () => {
   beforeAll(async () => {
     await setupUserTableForTestDatabase();
@@ -36,7 +38,9 @@ describe("User Routes", () => {
 
   describe("GET /api/v1/user", () => {
     it("should return all users", async () => {
-      const response = await request(app).get("/api/v1/user");
+      const response = await request(app)
+        .get("/api/v1/user")
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject(userData);
       id = response.body[0].id;
@@ -45,7 +49,9 @@ describe("User Routes", () => {
 
   describe("GET /api/v1/user/:id", () => {
     it("should return a single user", async () => {
-      const response = await request(app).get(`/api/v1/user/${id}`);
+      const response = await request(app)
+        .get(`/api/v1/user/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject({
         id: id,
@@ -63,7 +69,10 @@ describe("User Routes", () => {
         email: "sarahevans@yahoo.com",
         display_name: "Sarah Evans",
       };
-      const response = await request(app).post("/api/v1/user").send(newUser);
+      const response = await request(app)
+        .post("/api/v1/user")
+        .send(newUser)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(201);
 
       const createdUser = {
@@ -84,6 +93,7 @@ describe("User Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/user/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedUser);
       expect(response.statusCode).toBe(200);
       expect(response.body.user).toMatchObject({
@@ -98,6 +108,7 @@ describe("User Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/user/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedUser);
       expect(response.statusCode).toBe(200);
       expect(response.body.user).toMatchObject({
@@ -115,6 +126,7 @@ describe("User Routes", () => {
       };
       const response = await request(app)
         .patch(`/api/v1/user/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`)
         .send(updatedUser);
       expect(response.statusCode).toBe(404);
     });
@@ -129,23 +141,31 @@ describe("User Routes", () => {
       );
       routineId = routine.rows[0].id as string;
 
-      const response = await request(app).delete(`/api/v1/user/${id}`);
+      const response = await request(app)
+        .delete(`/api/v1/user/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(204);
     });
 
     it("should delete all routines associated with the user", async () => {
-      const response = await request(app).get(`/api/v1/routine/${routineId}`);
+      const response = await request(app)
+        .get(`/api/v1/routine/${routineId}`)
+        .set("Authorization", `Bearer ${testJwt}`);
 
       expect(response.statusCode).toBe(404);
     });
 
     it("user should no longer exist after being deleted", async () => {
-      const response = await request(app).get(`/api/v1/user/${id}`);
+      const response = await request(app)
+        .get(`/api/v1/user/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(404);
     });
 
     it("should not delete an user that does not exist", async () => {
-      const response = await request(app).delete(`/api/v1/user/123456789`);
+      const response = await request(app)
+        .delete(`/api/v1/user/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(404);
     });
   });
