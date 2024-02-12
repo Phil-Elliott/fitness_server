@@ -20,8 +20,8 @@ const securityMiddleware = (app: Express) => {
 
   // Enable CORS (configure as needed)
   const corsOptions = {
-    origin: "http://localhost:5173",
-    credentials: true,
+    // origin: "http://localhost:3001",
+    // credentials: true,
   };
 
   app.use(cors(corsOptions));
