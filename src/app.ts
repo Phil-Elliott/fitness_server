@@ -22,14 +22,20 @@ app.use(express.json({ limit: "10kb" }));
 securityMiddleware(app);
 app.use(cookieParser());
 
-// ROUTES
-// app.use("/api/v1/", ClerkExpressRequireAuth);
-app.use("/api/v1/user", routes.userRoutes);
-app.use("/api/v1/routine", routes.routineRoutes);
-app.use("/api/v1/workout", routes.workoutRoutes);
-app.use("/api/v1/workoutExercise", routes.workoutExerciseRoutes);
-app.use("/api/v1/exercise", routes.exerciseRoutes);
-app.use("/api/v1/workoutExerciseSet", routes.workoutExerciseSetRoutes);
+app.use("/api/v1/user", ClerkExpressRequireAuth(), routes.userRoutes);
+app.use("/api/v1/routine", ClerkExpressRequireAuth(), routes.routineRoutes);
+app.use("/api/v1/workout", ClerkExpressRequireAuth(), routes.workoutRoutes);
+app.use(
+  "/api/v1/workoutExercise",
+  ClerkExpressRequireAuth(),
+  routes.workoutExerciseRoutes
+);
+app.use("/api/v1/exercise", ClerkExpressRequireAuth(), routes.exerciseRoutes);
+app.use(
+  "/api/v1/workoutExerciseSet",
+  ClerkExpressRequireAuth(),
+  routes.workoutExerciseSetRoutes
+);
 
 // Clerk's error handler
 app.use((err: any, req: any, res: any, next: any) => {
