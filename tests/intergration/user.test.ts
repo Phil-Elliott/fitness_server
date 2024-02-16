@@ -82,6 +82,49 @@ describe("User Routes", () => {
       expect(response.body.user).toMatchObject(createdUser);
       id = response.body.user.id;
     });
+
+    it("should not create a user with a duplicate clerk_id", async () => {
+      const newUser = {
+        clerk_user_id: "73546",
+        email: "bob@gmail.com",
+        display_name: "Bob",
+      };
+      const response = await request(app)
+        .post("/api/v1/user")
+        .send(newUser)
+        .set("Authorization", `Bearer ${testJwt}`);
+      expect(response.statusCode).toBe(201);
+
+      const pastUser = {
+        id: response.body.user.id,
+        clerk_user_id: "73546",
+        email: "sarahevans@yahoo.com",
+        display_name: "Sarah Evans",
+      };
+      expect(response.body.user).toMatchObject(pastUser);
+    });
+
+    it("should not create a user with a duplicate email", async () => {
+      const newUser = {
+        clerk_user_id: "73547",
+        email: "sarahevans@yahoo.com",
+        display_name: "Sarah Smith Evans",
+      };
+
+      const response = await request(app)
+        .post("/api/v1/user")
+        .send(newUser)
+        .set("Authorization", `Bearer ${testJwt}`);
+      expect(response.statusCode).toBe(201);
+
+      const pastUser = {
+        id: response.body.user.id,
+        clerk_user_id: "73546",
+        email: "sarahevans@yahoo.com",
+        display_name: "Sarah Evans",
+      };
+      expect(response.body.user).toMatchObject(pastUser);
+    });
   });
 
   describe("PATCH /api/v1/user/:id", () => {

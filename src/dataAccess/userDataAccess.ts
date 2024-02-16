@@ -18,6 +18,15 @@ export const getUser = async (id: string): Promise<User> => {
 };
 
 export const createUser = async (userData: NewUser): Promise<User> => {
+  const existingUserResult = await db.execute(
+    sql`SELECT * FROM users WHERE clerk_user_id = ${userData.clerk_user_id} OR email = ${userData.email}`
+  );
+
+  if (existingUserResult.rows.length > 0) {
+    console.log("User already exists");
+    return existingUserResult.rows[0] as User;
+  }
+
   const result = await db.execute(
     sql`INSERT INTO users (clerk_user_id, display_name, email, created_at) VALUES (${userData.clerk_user_id}, ${userData.display_name}, ${userData.email}, NOW()) RETURNING *`
   );
