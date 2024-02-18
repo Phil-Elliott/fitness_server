@@ -12,3 +12,11 @@ export const workoutExercises = pgTable("workoutExercises", {
     .notNull(),
   order_index: integer("order_index"),
 });
+
+
+/*
+
+
+
+
+*/

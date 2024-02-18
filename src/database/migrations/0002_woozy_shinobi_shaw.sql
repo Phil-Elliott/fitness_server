@@ -1,0 +1,1 @@
+ALTER TABLE "templateWorkoutSchedules" RENAME COLUMN "dayOfWeek" TO "daysOfWeek";

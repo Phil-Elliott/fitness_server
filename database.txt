@@ -14,13 +14,19 @@ Table routines {
   user_id integer [ref: > users.id] // foreign key reference to users table
   name varchar
   description text
+  status text
+  frequency varchar
+  durationType varchar
+  durationValue integer
   created_at timestamp
 }
 
 Table workouts {
   id integer [pk, increment]
-  routine_id integer [ref: > routines.id]
   user_id integer [ref: > users.id]
+  routine_id integer [ref: > routines.id]
+  name text
+  description text
   date date
   status text
   created_at timestamp
@@ -50,5 +56,47 @@ Table exercise_sets {
   created_at timestamp
 }
 
+Table templateWorkouts {
+  id integer [pk, increment]
+  user_id integer [ref: > users.id]
+  routine_id integer [ref: > routines.id]
+  name varchar
+  description text
+  restBetweenExercises integer
+  status text
+  frequency varchar
+  durationType varchar
+  durationValue integer
+  created_at timestamp
+}
+
+table templateWorkoutExercises {
+  id integer [pk, increment]
+  templateWorkout_id integer [ref: > templateWorkouts.id]
+  exercise_id integer [ref: > exercises.id]
+  order_index integer
+  sets integer
+  restBetweenSets integer
+}
+
+Table workoutSchedules {
+  id integer [pk, increment]
+  templateWorkout_id integer [ref: > templateWorkouts.id]
+  dayOfWeek varchar // could be "Monday", "Tuesday", etc., or "Day1", "Day2" for more flexible schedules
+  startTime time // optional, to schedule a specific start time
+  endTime time // optional, to schedule an end time
+}
 
 
+1) Make new routineWorkout schema
+2) Make all the parts for it and wite tests
+
+1) Fix up workouts if needed
+  - should be minor changes
+
+2) Go back through tests to change up anything that relied on the old schema
+  - should be minor changes
+
+
+
+Go back and make sure the right stuff is deleted when something else is deleted
