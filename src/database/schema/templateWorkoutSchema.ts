@@ -31,7 +31,7 @@ export const templateWorkouts = pgTable("templateWorkouts", {
     .notNull(),
   routine_id: integer("routine_id").references(() => routines.id),
   name: varchar("name", { length: 256 }).notNull(),
-  description: varchar("description", { length: 256 }),
+  notes: varchar("description", { length: 256 }),
   restBetweenExercises: integer("restBetweenSets"),
   status: statusEnum("status"),
   frequency: frequencyEnum("frequency"),

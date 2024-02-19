@@ -7,10 +7,12 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { users } from "./userSchema";
+import { routines } from "./routineSchema";
+import { cardioExercises } from "./cardioExerciseSchema";
 
 export const statusEnum = pgEnum("status", ["active", "inactive"]);
 
-export const frequency = pgEnum("frequency", [
+export const frequencyEnum = pgEnum("frequency", [
   "daily",
   "weekly",
   "biweekly",
@@ -23,16 +25,19 @@ export const durationTypeEnum = pgEnum("durationType", [
   "months",
 ]);
 
-export const routines = pgTable("routines", {
+export const templateCardio = pgTable("templateCardio", {
   id: serial("id").primaryKey(),
   user_id: integer("user_id")
     .references(() => users.id)
     .notNull(),
-  name: varchar("name", { length: 256 }).notNull(),
-  notes: varchar("description", { length: 256 }),
+  routine_id: integer("routine_id").references(() => routines.id),
+  cardio_exercise_id: integer("cardio_exercise_id").references(
+    () => cardioExercises.id
+  ),
+  notes: varchar("notes", { length: 256 }),
   status: statusEnum("status"),
-  frequency: frequency("frequency"),
+  frequency: frequencyEnum("frequency"),
   durationType: durationTypeEnum("durationType"),
-  durationValue: integer("duration"),
+  durationValue: integer("durationValue"),
   created_at: varchar("created_at", { length: 256 }),
 });

@@ -13,7 +13,7 @@ Table routines {
   id integer [pk, increment]
   user_id integer [ref: > users.id] // foreign key reference to users table
   name varchar
-  description text
+  notes text
   status text
   frequency varchar
   durationType varchar
@@ -21,22 +21,71 @@ Table routines {
   created_at timestamp
 }
 
+Table templateWorkouts {
+  id integer [pk, increment]
+  user_id integer [ref: > users.id]
+  routine_id integer [ref: > routines.id]
+  name varchar
+  notes text
+  restBetweenExercises integer
+  status text
+  frequency varchar
+  durationType varchar
+  durationValue integer
+  created_at timestamp
+}
+
+table templateWorkoutExercises {
+  id integer [pk, increment]
+  templateWorkout_id integer [ref: > templateWorkouts.id]
+  exercise_id integer [ref: > exercises.id]
+  order_index integer
+  sets integer
+  restBetweenSets integer
+}
+
+Table templateCardio {
+  id integer [pk, increment]
+  user_id integer [ref: > users.id]
+  routine_id integer [ref: > routines.id]
+  cardio_exercise_id integer [ref: > cardioExercises.id]
+  notes text
+  status text
+  frequency varchar
+  durationType varchar
+  durationValue integer
+  created_at timestamp
+}
+
+Table templateWorkoutCardio {
+  id integer [pk, increment]
+  templateWorkout_id integer [ref: > templateWorkouts.id]
+  cardio_exercise_id integer [ref: > cardioExercises.id]
+  duration integer
+  distance float
+  order_index integer
+}
+
+Table templateSchedules {
+  id integer [pk, increment]
+  templateWorkout_id integer [ref: > templateWorkouts.id]
+  templateCardio_id integer [ref: > templateCardio.id]
+  dayOfWeek varchar // could be "Monday", "Tuesday", etc., or "Day1", "Day2" for more flexible schedules
+  startTime time // optional, to schedule a specific start time
+  endTime time // optional, to schedule an end time
+}
+
 Table workouts {
   id integer [pk, increment]
   user_id integer [ref: > users.id]
   routine_id integer [ref: > routines.id]
   name text
-  description text
+  notes text
   date date
   status text
   created_at timestamp
 } 
-
-Table exercises {
-  id integer [pk, increment]
-  name varchar
-  description text
-}
+// Should i have a time
 
 Table workout_exercises {
   id integer [pk, increment]
@@ -56,36 +105,37 @@ Table exercise_sets {
   created_at timestamp
 }
 
-Table templateWorkouts {
+Table cardio {
   id integer [pk, increment]
   user_id integer [ref: > users.id]
   routine_id integer [ref: > routines.id]
-  name varchar
-  description text
-  restBetweenExercises integer
-  status text
-  frequency varchar
-  durationType varchar
-  durationValue integer
+  cardio_id integer [ref: > cardioExercises.id]
+  duration integer
+  distance float
+  date date
+  notes text
   created_at timestamp
 }
 
-table templateWorkoutExercises {
+Table workoutCardio {
   id integer [pk, increment]
-  templateWorkout_id integer [ref: > templateWorkouts.id]
-  exercise_id integer [ref: > exercises.id]
+  cardio_id integer [ref: > cardio.id]
+  workout_id integer [ref: > workouts.id]
   order_index integer
-  sets integer
-  restBetweenSets integer
 }
 
-Table workoutSchedules {
+Table exercises {
   id integer [pk, increment]
-  templateWorkout_id integer [ref: > templateWorkouts.id]
-  dayOfWeek varchar // could be "Monday", "Tuesday", etc., or "Day1", "Day2" for more flexible schedules
-  startTime time // optional, to schedule a specific start time
-  endTime time // optional, to schedule an end time
+  name varchar
+  description text
 }
+
+Table cardioExercises {
+  id integer [pk, increment]
+  name varchar
+  description text
+}
+
 
 
 1) Make new routineWorkout schema
