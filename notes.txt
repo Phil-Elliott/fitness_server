@@ -1,3 +1,18 @@
+1) make cardio exercise stuff
+2) fix and add all workout stuff 
+3) add all cardio stuff
+4) think about making one script for everything
+
+- need to make everything work for the user
+- should i have get all users (admin only) or should i have get all users for a specific user (admin only)
+
+
+
+
+
+
+
+
 - clean up tests and get working all together
 
 
@@ -33,4 +48,3 @@ ideas for later
 
 - user should be good to go
     - check out what happens when a user signs up (should either add to database or return dashboard stuff)
-    - plan what happens when they delete their account 
