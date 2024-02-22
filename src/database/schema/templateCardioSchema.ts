@@ -31,9 +31,11 @@ export const durationTypeEnum = pgEnum("duration_type", [
 export const templateCardio = pgTable("templateCardio", {
   id: serial("id").primaryKey(),
   user_id: integer("user_id")
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
-  routine_id: integer("routine_id").references(() => routines.id),
+  routine_id: integer("routine_id").references(() => routines.id, {
+    onDelete: "cascade",
+  }),
   cardio_exercise_id: integer("cardio_exercise_id").references(
     () => cardioExercises.id
   ),

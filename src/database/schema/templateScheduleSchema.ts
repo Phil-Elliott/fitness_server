@@ -15,10 +15,12 @@ export const daysOfWeekEnum = pgEnum("daysOfWeek", [
 export const templateSchedules = pgTable("templateSchedules", {
   id: serial("id").primaryKey(),
   template_workout_id: integer("template_workout_id").references(
-    () => templateWorkouts.id
+    () => templateWorkouts.id,
+    { onDelete: "cascade" }
   ),
   template_cardio_id: integer("template_cardio_id").references(
-    () => templateCardio.id
+    () => templateCardio.id,
+    { onDelete: "cascade" }
   ),
   day_of_week: daysOfWeekEnum("day_of_week"),
   start_time: time("start_time", { withTimezone: true }),

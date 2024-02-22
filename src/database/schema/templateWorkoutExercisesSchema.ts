@@ -5,7 +5,7 @@ import { templateWorkouts } from "./templateWorkoutSchema";
 export const templateWorkoutExercises = pgTable("templateWorkoutExercises", {
   id: serial("id").primaryKey(),
   template_workout_id: integer("template_workout_id")
-    .references(() => templateWorkouts.id)
+    .references(() => templateWorkouts.id, { onDelete: "cascade" })
     .notNull(),
   exercise_id: integer("exercise_id")
     .references(() => exercises.id)

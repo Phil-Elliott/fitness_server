@@ -20,9 +20,11 @@ export const statusEnum = pgEnum("workout_status", [
 export const workouts = pgTable("workouts", {
   id: serial("id").primaryKey(),
   user_id: integer("user_id")
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
-  routine_id: integer("routine_id").references(() => routines.id),
+  routine_id: integer("routine_id").references(() => routines.id, {
+    onDelete: "cascade",
+  }),
   name: varchar("name", { length: 256 }).notNull(),
   notes: text("notes"),
   date: date("date").notNull(),

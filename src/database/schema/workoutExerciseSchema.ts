@@ -5,7 +5,7 @@ import { workouts } from "./workoutSchema";
 export const workoutExercises = pgTable("workoutExercises", {
   id: serial("id").primaryKey(),
   workout_id: integer("workout_id")
-    .references(() => workouts.id)
+    .references(() => workouts.id, { onDelete: "cascade" })
     .notNull(),
   exercise_id: integer("exercise_id")
     .references(() => exercises.id)

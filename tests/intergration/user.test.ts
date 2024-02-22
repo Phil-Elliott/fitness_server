@@ -198,6 +198,10 @@ describe("User Routes", () => {
       expect(response.statusCode).toBe(404);
     });
 
+    it("should delete everything else associated with the user", async () => {
+      // should handle all of this with the cascade delete
+    });
+
     it("user should no longer exist after being deleted", async () => {
       const response = await request(app)
         .get(`/api/v1/user/${id}`)
@@ -205,7 +209,7 @@ describe("User Routes", () => {
       expect(response.statusCode).toBe(404);
     });
 
-    it("should not delete an user that does not exist", async () => {
+    it("should not delete a user that does not exist", async () => {
       const response = await request(app)
         .delete(`/api/v1/user/123456789`)
         .set("Authorization", `Bearer ${testJwt}`);

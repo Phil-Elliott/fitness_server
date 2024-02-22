@@ -13,7 +13,7 @@ export const weightUnitEnum = pgEnum("weight_unit", ["lbs", "kg"]);
 export const workoutExerciseSets = pgTable("workoutExerciseSets", {
   id: serial("id").primaryKey(),
   workout_exercise_id: integer("workout_exercise_id")
-    .references(() => workoutExercises.id)
+    .references(() => workoutExercises.id, { onDelete: "cascade" })
     .notNull(),
   set_number: integer("set_number"),
   repetitions: integer("repetitions"),

@@ -54,8 +54,6 @@ export const deleteUser = async (id: string): Promise<void> => {
     throw new AppError(`User with ID ${id} does not exist.`, 404);
   }
 
-  await db.execute(sql`DELETE FROM routines WHERE user_id = ${id}`);
-
   await db.execute(sql`DELETE FROM users WHERE id = ${id}`);
   return;
 };

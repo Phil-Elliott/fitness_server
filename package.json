@@ -7,7 +7,7 @@
     "start": "nodemon --exec ts-node src/server.ts",
     "start:prod": "node build/server.ts",
     "build": "tsc",
-    "test": "cross-env NODE_ENV=test --sequence.sequencer vitest",
+    "test": "cross-env NODE_ENV=test vitest",
     "db:generate": "drizzle-kit generate:pg",
     "db:push": "drizzle-kit push:pg",
     "db:test:push": "cross-env NODE_ENV=test drizzle-kit push:pg",
