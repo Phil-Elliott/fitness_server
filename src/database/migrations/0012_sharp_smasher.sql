@@ -1,0 +1,1 @@
+ALTER TABLE "templateSchedules" DROP COLUMN IF EXISTS "start_time";

@@ -4,7 +4,7 @@ import { templateWorkouts } from "./templateWorkoutSchema";
 
 export const templateWorkoutExercises = pgTable("templateWorkoutExercises", {
   id: serial("id").primaryKey(),
-  templateWorkout_id: integer("templateWorkout_id")
+  template_workout_id: integer("template_workout_id")
     .references(() => templateWorkouts.id)
     .notNull(),
   exercise_id: integer("exercise_id")
@@ -12,5 +12,5 @@ export const templateWorkoutExercises = pgTable("templateWorkoutExercises", {
     .notNull(),
   order_index: integer("order_index").notNull(),
   sets: integer("sets").notNull(),
-  restBetweenSets: integer("restBetweenSets").notNull(),
+  rest_between_sets: integer("rest_between_sets").notNull(),
 });

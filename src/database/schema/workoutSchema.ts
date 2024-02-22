@@ -3,13 +3,15 @@ import {
   pgEnum,
   pgTable,
   serial,
-  uniqueIndex,
   varchar,
+  text,
+  timestamp,
+  date,
 } from "drizzle-orm/pg-core";
 import { users } from "./userSchema";
 import { routines } from "./routineSchema";
 
-export const statusEnum = pgEnum("status", [
+export const statusEnum = pgEnum("workout_status", [
   "not_started",
   "incomplete",
   "finished",
@@ -22,8 +24,8 @@ export const workouts = pgTable("workouts", {
     .notNull(),
   routine_id: integer("routine_id").references(() => routines.id),
   name: varchar("name", { length: 256 }).notNull(),
-  notes: varchar("notes", { length: 256 }),
-  date: varchar("date", { length: 256 }),
-  status: statusEnum("status"),
-  created_at: varchar("created_at", { length: 256 }).notNull(),
+  notes: text("notes"),
+  date: date("date").notNull(),
+  workout_status: statusEnum("workout_status"),
+  created_at: timestamp("created_at").defaultNow(),
 });

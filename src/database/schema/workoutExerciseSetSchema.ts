@@ -1,7 +1,14 @@
-import { integer, pgEnum, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { workoutExercises } from "./workoutExerciseSchema";
 
-export const weightUnitEnum = pgEnum("weightUnit", ["lbs", "kg"]);
+export const weightUnitEnum = pgEnum("weight_unit", ["lbs", "kg"]);
 
 export const workoutExerciseSets = pgTable("workoutExerciseSets", {
   id: serial("id").primaryKey(),
@@ -12,6 +19,6 @@ export const workoutExerciseSets = pgTable("workoutExerciseSets", {
   repetitions: integer("repetitions"),
   weight: integer("weight"),
   weight_unit: weightUnitEnum("weight_unit"),
-  notes: varchar("notes", { length: 256 }),
-  created_at: varchar("created_at", { length: 256 }),
+  notes: text("notes"),
+  created_at: timestamp("created_at").defaultNow(),
 });

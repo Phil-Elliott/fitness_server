@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial } from "drizzle-orm/pg-core";
 import { cardio } from "./cardioSchema";
 import { workouts } from "./workoutSchema";
 

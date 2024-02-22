@@ -1,17 +1,10 @@
-import {
-  integer,
-  pgEnum,
-  pgTable,
-  serial,
-  uniqueIndex,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, serial } from "drizzle-orm/pg-core";
 import { templateWorkouts } from "./templateWorkoutSchema";
 import { cardioExercises } from "./cardioExerciseSchema";
 
 export const templateWorkoutCardio = pgTable("templateWorkoutCardio", {
   id: serial("id").primaryKey(),
-  templateWorkout_id: integer("templateWorkout_id").references(
+  template_workout_id: integer("template_workout_id").references(
     () => templateWorkouts.id
   ),
   cardio_exercise_id: integer("cardio_exercise_id").references(

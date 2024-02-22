@@ -24,3 +24,13 @@ ideas for later
 - add some data visualization stuff
 
 - could see workouts and routines of others or popular ones
+
+
+
+- maybe review all schemas one more time and add any constraints that are missing
+- migrate everything
+- Create and fix controllers by thinking about what the user will be doing on the app (run through steps)
+
+- user should be good to go
+    - check out what happens when a user signs up (should either add to database or return dashboard stuff)
+    - plan what happens when they delete their account 

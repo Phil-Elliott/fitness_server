@@ -1,4 +1,4 @@
-import { integer, pgEnum, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, serial, time } from "drizzle-orm/pg-core";
 import { templateWorkouts } from "./templateWorkoutSchema";
 import { templateCardio } from "./templateCardioSchema";
 
@@ -14,13 +14,15 @@ export const daysOfWeekEnum = pgEnum("daysOfWeek", [
 
 export const templateSchedules = pgTable("templateSchedules", {
   id: serial("id").primaryKey(),
-  templateWorkout_id: integer("templateWorkout_id").references(
+  template_workout_id: integer("template_workout_id").references(
     () => templateWorkouts.id
   ),
-  templateCardio_id: integer("templateCardio_id").references(
+  template_cardio_id: integer("template_cardio_id").references(
     () => templateCardio.id
   ),
-  dayOfWeek: daysOfWeekEnum("daysOfWeek"),
-  startTime: varchar("startTime", { length: 256 }),
-  endTime: varchar("endTime", { length: 256 }),
+  day_of_week: daysOfWeekEnum("day_of_week"),
+  start_time: time("start_time", { withTimezone: true }),
+  end_time: time("start_time", { withTimezone: true }),
 });
+
+// Could maybe add up the projected end time based off of rests given and i could also show time remaining for the workout while the user is working out

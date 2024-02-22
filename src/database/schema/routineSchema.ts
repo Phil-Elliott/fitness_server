@@ -3,12 +3,14 @@ import {
   pgEnum,
   pgTable,
   serial,
-  uniqueIndex,
   varchar,
+  text,
+  timestamp,
+  date,
 } from "drizzle-orm/pg-core";
 import { users } from "./userSchema";
 
-export const statusEnum = pgEnum("status", ["active", "inactive"]);
+export const statusEnum = pgEnum("routine_status", ["active", "inactive"]);
 
 export const frequency = pgEnum("frequency", [
   "daily",
@@ -17,7 +19,7 @@ export const frequency = pgEnum("frequency", [
   "monthly",
 ]);
 
-export const durationTypeEnum = pgEnum("durationType", [
+export const durationTypeEnum = pgEnum("duration_type", [
   "days",
   "weeks",
   "months",
@@ -29,10 +31,11 @@ export const routines = pgTable("routines", {
     .references(() => users.id)
     .notNull(),
   name: varchar("name", { length: 256 }).notNull(),
-  notes: varchar("description", { length: 256 }),
-  status: statusEnum("status"),
+  notes: text("notes"),
+  status: statusEnum("routine_status").notNull(),
   frequency: frequency("frequency"),
-  durationType: durationTypeEnum("durationType"),
-  durationValue: integer("duration"),
-  created_at: varchar("created_at", { length: 256 }),
+  duration_type: durationTypeEnum("duration_type"),
+  duration_value: integer("duration_value"),
+  start_date: date("start_date").notNull(),
+  created_at: timestamp("created_at").defaultNow(),
 });

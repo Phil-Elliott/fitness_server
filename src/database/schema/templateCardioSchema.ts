@@ -3,14 +3,17 @@ import {
   pgEnum,
   pgTable,
   serial,
-  uniqueIndex,
-  varchar,
+  text,
+  timestamp,
 } from "drizzle-orm/pg-core";
 import { users } from "./userSchema";
 import { routines } from "./routineSchema";
 import { cardioExercises } from "./cardioExerciseSchema";
 
-export const statusEnum = pgEnum("status", ["active", "inactive"]);
+export const statusEnum = pgEnum("template_cardio_status", [
+  "active",
+  "inactive",
+]);
 
 export const frequencyEnum = pgEnum("frequency", [
   "daily",
@@ -19,7 +22,7 @@ export const frequencyEnum = pgEnum("frequency", [
   "monthly",
 ]);
 
-export const durationTypeEnum = pgEnum("durationType", [
+export const durationTypeEnum = pgEnum("duration_type", [
   "days",
   "weeks",
   "months",
@@ -34,10 +37,10 @@ export const templateCardio = pgTable("templateCardio", {
   cardio_exercise_id: integer("cardio_exercise_id").references(
     () => cardioExercises.id
   ),
-  notes: varchar("notes", { length: 256 }),
-  status: statusEnum("status"),
+  notes: text("notes"),
+  template_cardio_status: statusEnum("template_cardio_status"),
   frequency: frequencyEnum("frequency"),
-  durationType: durationTypeEnum("durationType"),
-  durationValue: integer("durationValue"),
-  created_at: varchar("created_at", { length: 256 }),
+  duration_type: durationTypeEnum("duration_type"),
+  duration_value: integer("duration_value"),
+  created_at: timestamp("created_at").defaultNow(),
 });
