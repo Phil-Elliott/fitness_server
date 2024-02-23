@@ -4,10 +4,15 @@ import AppError from "../utils/appError";
 import { User, NewUser } from "../types/userTypes";
 import buildUpdateQuery from "../utils/buildUpdateQuery";
 
-export const getUser = async (id: string): Promise<User> => {
-  const result = await db.execute(sql`SELECT * FROM users WHERE id = ${id}`);
+export const getCurrentUser = async (clerk_user_id: string): Promise<User> => {
+  const result = await db.execute(
+    sql`SELECT * FROM users WHERE clerk_user_id = ${clerk_user_id}`
+  );
   if (result.rows.length === 0) {
-    throw new AppError(`User with ID ${id} does not exist.`, 404);
+    throw new AppError(
+      `User with clerk_user_id ${clerk_user_id} does not exist.`,
+      404
+    );
   }
   return result.rows[0] as User;
 };
@@ -18,8 +23,7 @@ export const createUser = async (userData: NewUser): Promise<User> => {
   );
 
   if (existingUserResult.rows.length > 0) {
-    console.log("User already exists");
-    return existingUserResult.rows[0] as User;
+    throw new AppError("User already exists", 400);
   }
 
   const result = await db.execute(
@@ -29,26 +33,45 @@ export const createUser = async (userData: NewUser): Promise<User> => {
   return result.rows[0] as User;
 };
 
-export const updateUser = async (
-  id: string,
+export const updateCurrentUser = async (
+  clerk_user_id: string,
   userData: Partial<User>
 ): Promise<User> => {
-  const idResult = await db.execute(sql`SELECT id FROM users WHERE id = ${id}`);
+  const idResult = await db.execute(
+    sql`SELECT id FROM users WHERE clerk_user_id = ${clerk_user_id}`
+  );
   if (idResult.rows.length === 0) {
-    throw new AppError(`User with ID ${id} does not exist.`, 404);
+    throw new AppError(
+      `User with clerk_user_id ${clerk_user_id} does not exist.`,
+      404
+    );
   }
-  const updateQuery = buildUpdateQuery("users", userData, "id", id);
+  const updateQuery = buildUpdateQuery(
+    "users",
+    userData,
+    "clerk_user_id",
+    clerk_user_id
+  );
   const result = await db.execute(updateQuery());
   return result.rows[0] as User;
 };
 
 // deletes a user and deletes all routines associated with that user
-export const deleteUser = async (id: string): Promise<void> => {
-  const idResult = await db.execute(sql`SELECT id FROM users WHERE id = ${id}`);
+export const deleteCurrentUser = async (
+  clerk_user_id: string
+): Promise<void> => {
+  const idResult = await db.execute(
+    sql`SELECT id FROM users WHERE clerk_user_id = ${clerk_user_id}`
+  );
   if (idResult.rows.length === 0) {
-    throw new AppError(`User with ID ${id} does not exist.`, 404);
+    throw new AppError(
+      `User with clerk_user_id ${clerk_user_id} does not exist.`,
+      404
+    );
   }
 
-  await db.execute(sql`DELETE FROM users WHERE id = ${id}`);
+  await db.execute(
+    sql`DELETE FROM users WHERE clerk_user_id = ${clerk_user_id}`
+  );
   return;
 };
