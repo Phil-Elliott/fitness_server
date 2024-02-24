@@ -113,6 +113,27 @@
       "when": 1708576635459,
       "tag": "0015_stale_shocker",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "5",
+      "when": 1708736261546,
+      "tag": "0016_numerous_tattoo",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "5",
+      "when": 1708736333497,
+      "tag": "0017_simple_human_robot",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1708774316085,
+      "tag": "0018_cooing_metal_master",
+      "breakpoints": true
     }
   ]
 }

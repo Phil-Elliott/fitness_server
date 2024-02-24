@@ -27,7 +27,7 @@ export const durationTypeEnum = pgEnum("duration_type", [
 
 export const routines = pgTable("routines", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id")
+  user_id: varchar("user_id", { length: 256 })
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
   name: varchar("name", { length: 256 }).notNull(),

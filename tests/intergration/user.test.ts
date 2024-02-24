@@ -26,17 +26,17 @@ describe("User Routes", () => {
 
   const userData = [
     {
-      clerk_user_id: "user_12543",
+      id: "user_12543",
       email: "johndoe@gmail.com",
       display_name: "John Doe",
     },
     {
-      clerk_user_id: "user_13543",
+      id: "user_13543",
       email: "bobsmith@gmail.com",
       display_name: "Bob Smith",
     },
     {
-      clerk_user_id: "user_1257753",
+      id: "user_1257753",
       email: "elizebethOwens@aol.com",
       display_name: "Elizebeth Owens",
     },
@@ -49,7 +49,7 @@ describe("User Routes", () => {
         .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject({
-        clerk_user_id: userData[0].clerk_user_id,
+        id: userData[0].id,
         email: userData[0].email,
         display_name: userData[0].display_name,
       });
@@ -91,17 +91,12 @@ describe("User Routes", () => {
         .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(201);
 
-      const createdUser = {
-        id: response.body.user.id,
-        clerk_user_id: "user_12543",
-        ...newUser,
-      };
-      expect(response.body.user).toMatchObject(createdUser);
+      expect(response.body.user).toMatchObject(newUser);
     });
 
     it("should not create a user with a duplicate clerk_id and should return the user info with that clerk_id", async () => {
       const newUser = {
-        clerk_user_id: "user_12543",
+        id: "user_12543",
         email: "bob@gmail.com",
         display_name: "Bob",
       };
@@ -114,7 +109,7 @@ describe("User Routes", () => {
 
     it("should not create a user with a duplicate email", async () => {
       const newUser = {
-        clerk_user_id: "73547",
+        id: "73547",
         email: "sarahevans@yahoo.com",
         display_name: "Sarah Smith Evans",
       };
@@ -139,7 +134,7 @@ describe("User Routes", () => {
         .send(updatedUser);
       expect(response.statusCode).toBe(200);
       expect(response.body.user).toMatchObject({
-        clerk_user_id: userData[0].clerk_user_id,
+        id: userData[0].id,
         ...updatedUser,
       });
     });
@@ -154,7 +149,7 @@ describe("User Routes", () => {
         .send(updatedUser);
       expect(response.statusCode).toBe(200);
       expect(response.body.user).toMatchObject({
-        clerk_user_id: userData[0].clerk_user_id,
+        id: userData[0].id,
         email: "sarahevans@gmail.com",
         display_name: "Sarah Smith Evans",
       });

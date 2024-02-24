@@ -5,6 +5,7 @@ import {
   text,
   timestamp,
   date,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { users } from "./userSchema";
 import { routines } from "./routineSchema";
@@ -12,7 +13,7 @@ import { cardioExercises } from "./cardioExerciseSchema";
 
 export const cardio = pgTable("cardio", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id")
+  user_id: varchar("user_id", { length: 256 })
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
   routine_id: integer("routine_id").references(() => routines.id, {

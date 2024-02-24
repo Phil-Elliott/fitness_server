@@ -7,9 +7,9 @@ export const getCurrentUser = catchAsync(async (req, res) => {
 });
 
 export const createUser = catchAsync(async (req, res) => {
-  const clerkUserId = req.auth.userId;
+  const userId = req.auth.userId;
   const newUser = await userService.createUser({
-    clerk_user_id: clerkUserId,
+    id: userId,
     ...req.body,
   });
   res.status(201).json({ user: newUser });

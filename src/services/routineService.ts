@@ -1,8 +1,10 @@
 import * as routineDataAccess from "../dataAccess/routineDataAccess";
 import { NewRoutine, Routine } from "../types/routineTypes";
 
-export const getAllRoutines = async (): Promise<Routine[]> => {
-  return await routineDataAccess.getAllRoutines();
+export const getAllRoutines = async (
+  clerk_user_id: string
+): Promise<Routine[]> => {
+  return await routineDataAccess.getAllRoutines(clerk_user_id);
 };
 
 export const getRoutine = async (id: string): Promise<Routine> => {

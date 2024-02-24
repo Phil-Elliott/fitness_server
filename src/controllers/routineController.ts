@@ -2,7 +2,7 @@ import * as routineService from "../services/routineService";
 import { catchAsync } from "../utils/catchAsync";
 
 export const getAllRoutines = catchAsync(async (req, res, next) => {
-  const routines = await routineService.getAllRoutines();
+  const routines = await routineService.getAllRoutines(req.auth.userId);
   res.status(200).json(routines);
 });
 

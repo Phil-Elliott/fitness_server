@@ -5,6 +5,7 @@ import {
   serial,
   text,
   timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { users } from "./userSchema";
 import { routines } from "./routineSchema";
@@ -30,7 +31,7 @@ export const durationTypeEnum = pgEnum("duration_type", [
 
 export const templateCardio = pgTable("templateCardio", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id")
+  user_id: varchar("user_id", { length: 256 })
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
   routine_id: integer("routine_id").references(() => routines.id, {

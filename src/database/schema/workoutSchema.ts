@@ -19,7 +19,7 @@ export const statusEnum = pgEnum("workout_status", [
 
 export const workouts = pgTable("workouts", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id")
+  user_id: varchar("user_id", { length: 256 })
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
   routine_id: integer("routine_id").references(() => routines.id, {

@@ -4,8 +4,12 @@ import AppError from "../utils/appError";
 import buildUpdateQuery from "../utils/buildUpdateQuery";
 import { NewRoutine, Routine } from "../types/routineTypes";
 
-export const getAllRoutines = async (): Promise<Routine[]> => {
-  const result = await db.execute(sql`SELECT * FROM routines`);
+export const getAllRoutines = async (
+  clerk_user_id: string
+): Promise<Routine[]> => {
+  const result = await db.execute(
+    sql`SELECT * FROM routines where clerk_user_id = ${clerk_user_id}`
+  );
   return result.rows as Routine[];
 };
 
