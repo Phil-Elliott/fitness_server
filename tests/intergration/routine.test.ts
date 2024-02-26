@@ -3,8 +3,6 @@ import app from "../../src/app";
 import { expect, describe, it, beforeAll, afterAll, vi } from "vitest";
 import setupRoutineTableForTestDatabase from "../../scripts/routine/setupTests";
 import teardownRoutineTableForTestDatabase from "../../scripts/routine/teardownTests";
-import db from "../../src/database/setup";
-import { sql } from "drizzle-orm";
 import { Request, Response, NextFunction } from "express";
 
 vi.mock("@clerk/clerk-sdk-node", () => ({
@@ -84,8 +82,8 @@ describe("Routine Routes", () => {
         name: "Cool routine",
         notes: "A routine to do cool things",
         frequency: "daily",
-        start_date: new Date("2025-09-20"),
-        end_date: new Date("2025-11-12"),
+        start_date: "2025-09-20",
+        end_date: "2025-11-12",
       };
       const response = await request(app)
         .post("/api/v1/routine")

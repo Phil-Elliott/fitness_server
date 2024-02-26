@@ -1,10 +1,17 @@
 import request from "supertest";
 import app from "../../src/app";
-import { expect, describe, it, beforeAll, afterAll } from "vitest";
+import { expect, describe, it, beforeAll, afterAll, vi } from "vitest";
 import setupWorkoutTableForTestDatabase from "../../scripts/workout/setupTests";
 import teardownWorkoutTableForTestDatabase from "../../scripts/workout/teardownTests";
-import db from "../../src/database/setup";
-import { sql } from "drizzle-orm";
+import { Request, Response, NextFunction } from "express";
+
+vi.mock("@clerk/clerk-sdk-node", () => ({
+  ClerkExpressRequireAuth:
+    () => (req: Request, res: Response, next: NextFunction) => {
+      req.auth = { userId: "user_12543" };
+      next();
+    },
+}));
 
 const testJwt = process.env.CLERK_TEST_JWT;
 
@@ -18,18 +25,25 @@ describe("Workout Routes", () => {
   });
 
   let id: string;
+  let routineId: string;
   const workoutData = [
     {
+      user_id: "user_12543",
       name: "Morning Workout",
-      description: "A workout to start the day",
+      notes: "A workout to start the day",
+      workout_status: "incomplete",
     },
     {
+      user_id: "user_12543",
       name: "Evening Workout",
-      description: "A workout to end the day",
+      notes: "A workout to end the day",
+      workout_status: "not_started",
     },
     {
+      user_id: "user_12543",
       name: "Afternoon Workout",
-      description: "A workout to break up the day",
+      notes: "A workout to break up the day",
+      workout_status: "finished",
     },
   ];
 
@@ -41,6 +55,7 @@ describe("Workout Routes", () => {
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject(workoutData);
       id = response.body[0].id;
+      routineId = response.body[0].routine_id;
     });
   });
 
@@ -53,27 +68,20 @@ describe("Workout Routes", () => {
       expect(response.body).toMatchObject({
         id: id,
         name: workoutData[0].name,
-        description: workoutData[0].description,
+        notes: workoutData[0].notes,
       });
     });
   });
 
   describe("Post /api/v1/workout", () => {
     it("should create a new workout", async () => {
-      const user = await db.execute(
-        sql`INSERT INTO users (clerk_user_id, email, display_name) VALUES ('3244343', 'BobThomas@gmail.com', 'Bob Thomas') RETURNING *`
-      );
-      const userId = user.rows[0].id as number;
-
-      const routine = await db.execute(
-        sql`INSERT INTO routines (user_id, name, description, created_at) VALUES (${userId}, 'Created Routine', 'A new routine created to start the day', NOW()) RETURNING *`
-      );
-      const routineId = routine.rows[0].id as number;
-
       const newWorkout = {
+        user_id: "user_12543",
         routine_id: routineId,
         name: "Cool Workout",
-        description: "A Workout to do cool things",
+        notes: "A Workout to do cool things",
+        date: "2024-02-26",
+        workout_status: "incomplete",
       };
       const response = await request(app)
         .post("/api/v1/workout")
@@ -94,7 +102,7 @@ describe("Workout Routes", () => {
     it("should update all items of a workout", async () => {
       const updatedWorkout = {
         name: "New Workout",
-        description: "A Workout to do new things",
+        notes: "A Workout to do new things",
       };
       const response = await request(app)
         .patch(`/api/v1/workout/${id}`)
@@ -104,13 +112,13 @@ describe("Workout Routes", () => {
       expect(response.body.workout).toMatchObject({
         id: id,
         name: updatedWorkout.name,
-        description: updatedWorkout.description,
+        notes: updatedWorkout.notes,
       });
     });
 
     it("should update some items of a workout", async () => {
       const updatedWorkout = {
-        description: "Another Workout to do new things",
+        notes: "Another Workout to do new things",
       };
       const response = await request(app)
         .patch(`/api/v1/workout/${id}`)
@@ -120,14 +128,14 @@ describe("Workout Routes", () => {
       expect(response.body.workout).toMatchObject({
         id: id,
         name: "New Workout",
-        description: updatedWorkout.description,
+        notes: updatedWorkout.notes,
       });
     });
 
     it("should not update a workout that does not exist", async () => {
       const updatedWorkout = {
         name: "Terrific Workout",
-        description: "A Workout to do terrific things",
+        notes: "A Workout to do terrific things",
       };
       const response = await request(app)
         .patch(`/api/v1/workout/123456789`)
@@ -160,3 +168,11 @@ describe("Workout Routes", () => {
     });
   });
 });
+
+/*
+
+Will need to create handlers to show workouts for a specific routine or a specific date and same with routines
+
+
+
+*/

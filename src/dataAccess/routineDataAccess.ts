@@ -28,13 +28,9 @@ export const createRoutine = async (
   userId: string,
   routineData: NewRoutine
 ): Promise<Routine> => {
-  console.log(routineData, "routineData", userId, "userId");
-
   const result = await db.execute(
-    sql`INSERT INTO routines (user_id, name, notes, frequency,  start_date, end_date, created_at) VALUES (${userId}, ${routineData.name}, ${routineData.notes}, ${routineData.frequency}, date '2025-09-20', date '2025-11-12', NOW()) RETURNING *`
+    sql`INSERT INTO routines (user_id, name, notes, frequency,  start_date, end_date, created_at) VALUES (${userId}, ${routineData.name}, ${routineData.notes}, ${routineData.frequency}, ${routineData.start_date}, ${routineData.end_date}, NOW()) RETURNING *`
   );
-
-  console.log("result");
 
   return result.rows[0] as Routine;
 };
