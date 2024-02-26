@@ -1,29 +1,34 @@
 import * as routineDataAccess from "../dataAccess/routineDataAccess";
 import { NewRoutine, Routine } from "../types/routineTypes";
 
-export const getAllRoutines = async (
-  clerk_user_id: string
-): Promise<Routine[]> => {
-  return await routineDataAccess.getAllRoutines(clerk_user_id);
+export const getAllRoutines = async (userId: string): Promise<Routine[]> => {
+  return await routineDataAccess.getAllRoutines(userId);
 };
 
-export const getRoutine = async (id: string): Promise<Routine> => {
-  return await routineDataAccess.getRoutine(id);
+export const getRoutine = async (
+  userId: string,
+  routineId: string
+): Promise<Routine> => {
+  return await routineDataAccess.getRoutine(userId, routineId);
 };
 
 export const createRoutine = async (
-  RoutineData: NewRoutine
+  userId: string,
+  routineData: NewRoutine
 ): Promise<Routine> => {
-  return await routineDataAccess.createRoutine(RoutineData);
+  return await routineDataAccess.createRoutine(userId, routineData);
 };
 
 export const updateRoutine = async (
-  id: string,
+  userId: string,
   routineData: Routine
 ): Promise<Routine> => {
-  return await routineDataAccess.updateRoutine(id, routineData);
+  return await routineDataAccess.updateRoutine(userId, routineData);
 };
 
-export const deleteRoutine = async (id: string): Promise<void> => {
-  return await routineDataAccess.deleteRoutine(id);
+export const deleteRoutine = async (
+  userId: string,
+  routineId: string
+): Promise<void> => {
+  return await routineDataAccess.deleteRoutine(userId, routineId);
 };

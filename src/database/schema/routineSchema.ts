@@ -10,7 +10,11 @@ import {
 } from "drizzle-orm/pg-core";
 import { users } from "./userSchema";
 
-export const statusEnum = pgEnum("routine_status", ["active", "inactive"]);
+// export const statusEnum = pgEnum("routine_status", [
+//   "active",
+//   "scheduled",
+//   "inactive",
+// ]);
 
 export const frequency = pgEnum("frequency", [
   "daily",
@@ -19,11 +23,11 @@ export const frequency = pgEnum("frequency", [
   "monthly",
 ]);
 
-export const durationTypeEnum = pgEnum("duration_type", [
-  "days",
-  "weeks",
-  "months",
-]);
+// export const durationTypeEnum = pgEnum("duration_type", [
+//   "days",
+//   "weeks",
+//   "months",
+// ]);
 
 export const routines = pgTable("routines", {
   id: serial("id").primaryKey(),
@@ -32,10 +36,11 @@ export const routines = pgTable("routines", {
     .notNull(),
   name: varchar("name", { length: 256 }).notNull(),
   notes: text("notes"),
-  status: statusEnum("routine_status").notNull(),
+  // status: statusEnum("routine_status").notNull(),
   frequency: frequency("frequency"),
-  duration_type: durationTypeEnum("duration_type"),
-  duration_value: integer("duration_value"),
+  // duration_type: durationTypeEnum("duration_type"),
+  // duration_value: integer("duration_value"),
   start_date: date("start_date").notNull(),
+  end_date: date("end_date"),
   created_at: timestamp("created_at").defaultNow(),
 });

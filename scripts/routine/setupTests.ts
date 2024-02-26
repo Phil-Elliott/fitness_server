@@ -3,39 +3,22 @@ import db from "../../src/database/setup";
 
 async function setupRoutineTableForTestDatabase() {
   try {
-    const response = await db.execute(
-      sql`INSERT INTO users (clerk_user_id, email, display_name) VALUES ('user_12543', 'johndoe@gmail.com', 'John Doe') returning *;`
+    await db.execute(
+      sql`INSERT INTO users (id, email, display_name) VALUES ('user_12543', 'johndoe@gmail.com', 'John Doe');`
     );
-
-    const id = response.rows[0].id;
 
     await db.execute(
-      sql`INSERT INTO routines (user_id, name, notes, routine_status, frequency, duration_type, duration_value, start_date, created_at) VALUES (${id}, 'Morning Routine', 'A routine to start the day', 'active', 'daily', 'days', 10, date '2025-01-01', NOW());`
+      sql`INSERT INTO routines (user_id, name, notes, frequency,  start_date, end_date, created_at) VALUES ('user_12543', 'Morning Routine', 'A routine to start the day', 'daily',  date '2025-09-20', date '2025-11-12', NOW());`
     );
-    // await db.execute(
-    //   sql`INSERT INTO routines (user_id, name, notes, status, frequency, duration_type, start_date, created_at) VALUES (${id}, 'Afternoon Routine', 'A routine to start the afternoon', 'active', 'daily', 'days', NOW());`
-    // );
-    // await db.execute(
-    //   sql`INSERT INTO routines (user_id, name, notes, status, frequency, duration_type, start_date, created_at) VALUES (${id}, 'Night Routine', 'A routine to start the night', 'active', 'daily', 'days', NOW());`
-    // );
+    await db.execute(
+      sql`INSERT INTO routines (user_id, name, notes, frequency,  start_date, end_date, created_at) VALUES ('user_12543', 'Afternoon Routine', 'A routine for the middle of the day', 'daily', date '2026-02-08', date '2026-04-18', NOW());`
+    );
+    await db.execute(
+      sql`INSERT INTO routines (user_id, name, notes, frequency,  start_date, end_date, created_at) VALUES ('user_12543', 'Evening Routine', 'A routine to end the day', 'daily',  date '2024-03-02', date '2024-05-03', NOW());`
+    );
   } catch (error) {
     console.error("Error setting up Routine table in test database:", error);
   }
 }
 
 export default setupRoutineTableForTestDatabase;
-
-// export const routines = pgTable("routines", {
-//   id: serial("id").primaryKey(),
-//   user_id: integer("user_id")
-//     .references(() => users.id, { onDelete: "cascade" })
-//     .notNull(),
-//   name: varchar("name", { length: 256 }).notNull(),
-//   notes: text("notes"),
-//   status: statusEnum("routine_status").notNull(),
-//   frequency: frequency("frequency"),
-//   duration_type: durationTypeEnum("duration_type"),
-//   duration_value: integer("duration_value"),
-//   start_date: date("start_date").notNull(),
-//   created_at: timestamp("created_at").defaultNow(),
-// });

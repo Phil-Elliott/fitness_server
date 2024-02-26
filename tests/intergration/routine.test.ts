@@ -26,19 +26,31 @@ describe("Routine Routes", () => {
     await teardownRoutineTableForTestDatabase();
   });
 
-  // let id: string;
+  let id: string;
   const routineData = [
     {
+      user_id: "user_12543",
       name: "Morning Routine",
-      description: "A routine to start the day",
+      notes: "A routine to start the day",
+      frequency: "daily",
+      start_date: "2025-09-20",
+      end_date: "2025-11-12",
     },
     {
-      name: "Evening Routine",
-      description: "A routine to end the day",
-    },
-    {
+      user_id: "user_12543",
       name: "Afternoon Routine",
-      description: "A routine to break up the day",
+      notes: "A routine for the middle of the day",
+      frequency: "daily",
+      start_date: "2026-02-08",
+      end_date: "2026-04-18",
+    },
+    {
+      user_id: "user_12543",
+      name: "Evening Routine",
+      notes: "A routine to end the day",
+      frequency: "daily",
+      start_date: "2024-03-02",
+      end_date: "2024-05-03",
     },
   ];
 
@@ -49,117 +61,122 @@ describe("Routine Routes", () => {
         .set("Authorization", `Bearer ${testJwt}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toMatchObject(routineData);
-      // id = response.body[0].id;
+      id = response.body[0].id;
     });
   });
 
-  // describe("GET /api/v1/routine/:id", () => {
-  //   it("should return a single routine", async () => {
-  //     const response = await request(app)
-  //       .get(`/api/v1/routine/${id}`)
-  //       .set("Authorization", `Bearer ${testJwt}`);
-  //     expect(response.statusCode).toBe(200);
-  //     expect(response.body).toMatchObject({
-  //       id: id,
-  //       name: routineData[0].name,
-  //       description: routineData[0].description,
-  //     });
-  //   });
-  // });
+  describe("GET /api/v1/routine/:id", () => {
+    it("should return a single routine", async () => {
+      const response = await request(app)
+        .get(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toMatchObject({
+        id: id,
+        ...routineData[0],
+      });
+    });
+  });
 
-  // describe("Post /api/v1/routine", () => {
-  //   it("should create a new routine", async () => {
-  //     let user = await db.execute(
-  //       sql`INSERT INTO users (clerk_user_id, email, display_name) VALUES ('73543', 'matStone@gmail.com', 'Mat Stone') RETURNING *`
-  //     );
+  describe("Post /api/v1/routine", () => {
+    it("should create a new routine", async () => {
+      const newRoutine = {
+        name: "Cool routine",
+        notes: "A routine to do cool things",
+        frequency: "daily",
+        start_date: new Date("2025-09-20"),
+        end_date: new Date("2025-11-12"),
+      };
+      const response = await request(app)
+        .post("/api/v1/routine")
+        .set("Authorization", `Bearer ${testJwt}`)
+        .send(newRoutine);
+      expect(response.statusCode).toBe(201);
 
-  //     const newRoutine = {
-  //       user_id: user.rows[0].id,
-  //       name: "Cool routine",
-  //       description: "A routine to do cool things",
-  //     };
-  //     const response = await request(app)
-  //       .post("/api/v1/routine")
-  //       .set("Authorization", `Bearer ${testJwt}`)
-  //       .send(newRoutine);
-  //     expect(response.statusCode).toBe(201);
+      const createdRoutine = {
+        id: response.body.routine.id,
+        name: "Cool routine",
+        notes: "A routine to do cool things",
+        frequency: "daily",
+        start_date: response.body.routine.start_date,
+        end_date: response.body.routine.end_date,
+      };
+      expect(response.body.routine).toMatchObject(createdRoutine);
+      id = response.body.routine.id;
+    });
+  });
 
-  //     const createdRoutine = {
-  //       id: response.body.routine.id,
-  //       ...newRoutine,
-  //     };
-  //     expect(response.body.routine).toMatchObject(createdRoutine);
-  //     id = response.body.routine.id;
-  //   });
-  // });
+  describe("PATCH /api/v1/routine/:id", () => {
+    it("should update all items of a routine", async () => {
+      const updatedRoutine = {
+        name: "New routine",
+        notes: "A routine to do new things",
+        frequency: "weekly",
+        start_date: new Date("2025-09-22"),
+        end_date: new Date("2026-12-12"),
+      };
+      const response = await request(app)
+        .patch(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
+        .send(updatedRoutine);
+      expect(response.statusCode).toBe(200);
+      expect(response.body.routine).toMatchObject({
+        id: id,
+        name: "New routine",
+        notes: "A routine to do new things",
+        frequency: "weekly",
+      });
+    });
 
-  // describe("PATCH /api/v1/routine/:id", () => {
-  //   it("should update all items of a routine", async () => {
-  //     const updatedRoutine = {
-  //       name: "New routine",
-  //       description: "A routine to do new things",
-  //     };
-  //     const response = await request(app)
-  //       .patch(`/api/v1/routine/${id}`)
-  //       .set("Authorization", `Bearer ${testJwt}`)
-  //       .send(updatedRoutine);
-  //     expect(response.statusCode).toBe(200);
-  //     expect(response.body.routine).toMatchObject({
-  //       id: id,
-  //       name: updatedRoutine.name,
-  //       description: updatedRoutine.description,
-  //     });
-  //   });
+    it("should update some items of a routine", async () => {
+      const updatedRoutine = {
+        notes: "Another routine to do new things",
+      };
+      const response = await request(app)
+        .patch(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`)
+        .send(updatedRoutine);
+      expect(response.statusCode).toBe(200);
+      expect(response.body.routine).toMatchObject({
+        id: id,
+        name: "New routine",
+        notes: updatedRoutine.notes,
+      });
+    });
 
-  //   it("should update some items of a routine", async () => {
-  //     const updatedRoutine = {
-  //       description: "Another routine to do new things",
-  //     };
-  //     const response = await request(app)
-  //       .patch(`/api/v1/routine/${id}`)
-  //       .set("Authorization", `Bearer ${testJwt}`)
-  //       .send(updatedRoutine);
-  //     expect(response.statusCode).toBe(200);
-  //     expect(response.body.routine).toMatchObject({
-  //       id: id,
-  //       name: "New routine",
-  //       description: updatedRoutine.description,
-  //     });
-  //   });
+    it("should not update a routine that does not exist", async () => {
+      const updatedRoutine = {
+        name: "Terrific routine",
+        description: "A routine to do terrific things",
+      };
+      const response = await request(app)
+        .patch(`/api/v1/routine/1234561789`)
+        .set("Authorization", `Bearer ${testJwt}`)
+        .send(updatedRoutine);
+      expect(response.statusCode).toBe(404);
+    });
+  });
 
-  //   it("should not update a routine that does not exist", async () => {
-  //     const updatedRoutine = {
-  //       name: "Terrific routine",
-  //       description: "A routine to do terrific things",
-  //     };
-  //     const response = await request(app)
-  //       .patch(`/api/v1/routine/123456789`)
-  //       .set("Authorization", `Bearer ${testJwt}`)
-  //       .send(updatedRoutine);
-  //     expect(response.statusCode).toBe(404);
-  //   });
-  // });
+  describe("DELETE /api/v1/routine/:id", () => {
+    it("should delete a routine", async () => {
+      const response = await request(app)
+        .delete(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
+      expect(response.statusCode).toBe(204);
+    });
 
-  // describe("DELETE /api/v1/routine/:id", () => {
-  //   it("should delete a routine", async () => {
-  //     const response = await request(app)
-  //       .delete(`/api/v1/routine/${id}`)
-  //       .set("Authorization", `Bearer ${testJwt}`);
-  //     expect(response.statusCode).toBe(204);
-  //   });
+    it("routine should no longer exist after being deleted", async () => {
+      const response = await request(app)
+        .get(`/api/v1/routine/${id}`)
+        .set("Authorization", `Bearer ${testJwt}`);
+      expect(response.statusCode).toBe(404);
+    });
 
-  //   it("routine should no longer exist after being deleted", async () => {
-  //     const response = await request(app)
-  //       .get(`/api/v1/routine/${id}`)
-  //       .set("Authorization", `Bearer ${testJwt}`);
-  //     expect(response.statusCode).toBe(404);
-  //   });
-
-  //   it("should not delete a routine that does not exist", async () => {
-  //     const response = await request(app)
-  //       .delete(`/api/v1/routine/123456789`)
-  //       .set("Authorization", `Bearer ${testJwt}`);
-  //     expect(response.statusCode).toBe(404);
-  //   });
-  // });
+    it("should not delete a routine that does not exist", async () => {
+      const response = await request(app)
+        .delete(`/api/v1/routine/123456789`)
+        .set("Authorization", `Bearer ${testJwt}`);
+      expect(response.statusCode).toBe(404);
+    });
+  });
 });
