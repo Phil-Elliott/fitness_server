@@ -3,20 +3,21 @@ import db from "../../src/database/setup";
 
 async function setupWorkoutExerciseTableForTestDatabase() {
   try {
-    const user = await db.execute(
-      sql`INSERT INTO users (clerk_user_id, email, display_name) VALUES ('843543', 'johnHowlet@gmail.com', 'John Howlet') RETURNING *`
+    await db.execute(
+      sql`INSERT INTO users (id, email, display_name) VALUES ('user_12543', 'johndoe@gmail.com', 'John Doe');`
     );
-    const userId = user.rows[0].id as number;
 
     const routine = await db.execute(
-      sql`INSERT INTO routines (user_id, name, description, created_at) VALUES (${userId}, 'New Routine', 'A new routine to start the day', NOW()) RETURNING *`
+      sql`INSERT INTO routines (user_id, name, notes, frequency,  start_date, end_date, created_at) VALUES ('user_12543', 'Morning Routine', 'A routine to start the day', 'daily',  date '2025-09-20', date '2025-11-12', NOW()) RETURNING *;`
     );
-    const routineId = routine.rows[0].id as number;
+
+    const routineId = routine.rows[0].id;
 
     const workout = await db.execute(
-      sql`INSERT INTO workouts (routine_id, name, description, created_at) VALUES (${routineId}, 'Morning Workout', 'A workout to start the day', NOW()) RETURNING *`
+      sql`INSERT INTO workouts (user_id, routine_id, name, notes, date, workout_status, created_at) VALUES ('user_12543', ${routineId}, 'Morning Workout', 'A workout to start the day', date '2024-02-26', 'incomplete', NOW()) RETURNING *`
     );
-    const workoutId = workout.rows[0].id as number;
+
+    const workoutId = workout.rows[0].id;
 
     const exercise = await db.execute(
       sql`INSERT INTO exercises (name, description) VALUES ('Push Ups', 'A classic exercise to build upper body strength') RETURNING *`
@@ -41,3 +42,14 @@ async function setupWorkoutExerciseTableForTestDatabase() {
 }
 
 export default setupWorkoutExerciseTableForTestDatabase;
+
+// export const workoutExercises = pgTable("workoutExercises", {
+//   id: serial("id").primaryKey(),
+//   workout_id: integer("workout_id")
+//     .references(() => workouts.id, { onDelete: "cascade" })
+//     .notNull(),
+//   exercise_id: integer("exercise_id")
+//     .references(() => exercises.id)
+//     .notNull(),
+//   order_index: integer("order_index"),
+// });

@@ -5,8 +5,8 @@ function buildUpdateQuery(
   data: Record<string, any>,
   idField: string,
   idValue: string | number,
-  idField2: string,
-  idValue2: string | number
+  idField2?: string,
+  idValue2?: string | number
 ) {
   let setParts = [];
   for (const [key, value] of Object.entries(data)) {

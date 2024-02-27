@@ -1,10 +1,19 @@
 import request from "supertest";
 import app from "../../src/app";
-import { expect, describe, it, beforeAll, afterAll } from "vitest";
+import { expect, describe, it, beforeAll, afterAll, vi } from "vitest";
 import setupWorkoutExerciseTableForTestDatabase from "../../scripts/workoutExercise/setupTests";
 import teardownWorkoutExerciseTableForTestDatabase from "../../scripts/workoutExercise/teardownTests";
 import db from "../../src/database/setup";
 import { sql } from "drizzle-orm";
+import { Request, Response, NextFunction } from "express";
+
+vi.mock("@clerk/clerk-sdk-node", () => ({
+  ClerkExpressRequireAuth:
+    () => (req: Request, res: Response, next: NextFunction) => {
+      req.auth = { userId: "user_12543" };
+      next();
+    },
+}));
 
 const testJwt = process.env.CLERK_TEST_JWT;
 
@@ -56,20 +65,11 @@ describe("WorkoutExercise Routes", () => {
 
   describe("Post /api/v1/workoutExercise", () => {
     it("should create a new workoutExercise", async () => {
-      const user = await db.execute(
-        sql`INSERT INTO users (clerk_user_id, email, display_name) VALUES ('3244343', 'BobThomas@gmail.com', 'Bob Thomas') RETURNING *`
-      );
-      const userId = user.rows[0].id as number;
-
-      const routine = await db.execute(
-        sql`INSERT INTO routines (user_id, name, description, created_at) VALUES (${userId}, 'Created Routine', 'A new routine created to start the day', NOW()) RETURNING *`
-      );
-      const routineId = routine.rows[0].id as number;
-
       const workout = await db.execute(
-        sql`INSERT INTO workouts (routine_id, name, description, created_at) VALUES (${routineId}, 'Awesome Workout', 'A workout to start the day', NOW()) RETURNING *`
+        sql`INSERT INTO workouts (user_id, name, notes, date, workout_status, created_at) VALUES ('user_12543', 'Night Workout', 'A workout to end the day', date '2024-03-07', 'incomplete', NOW()) RETURNING *`
       );
-      const workoutId = workout.rows[0].id as number;
+
+      const workoutId = workout.rows[0].id;
 
       const exercise = await db.execute(
         sql`INSERT INTO exercises (name, description) VALUES ('Awesome Push Ups', 'An awesome exercise to build upper body strength') RETURNING *`

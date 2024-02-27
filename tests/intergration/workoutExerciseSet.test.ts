@@ -1,10 +1,19 @@
 import request from "supertest";
 import app from "../../src/app";
-import { expect, describe, it, beforeAll, afterAll } from "vitest";
+import { expect, describe, it, beforeAll, afterAll, vi } from "vitest";
 import setupWorkoutExerciseSetTableForTestDatabase from "../../scripts/workoutExerciseSet/setupTests";
 import teardownWorkoutExerciseSetTableForTestDatabase from "../../scripts/workoutExerciseSet/teardownTests";
 import db from "../../src/database/setup";
 import { sql } from "drizzle-orm";
+import { Request, Response, NextFunction } from "express";
+
+vi.mock("@clerk/clerk-sdk-node", () => ({
+  ClerkExpressRequireAuth:
+    () => (req: Request, res: Response, next: NextFunction) => {
+      req.auth = { userId: "user_12543" };
+      next();
+    },
+}));
 
 const testJwt = process.env.CLERK_TEST_JWT;
 

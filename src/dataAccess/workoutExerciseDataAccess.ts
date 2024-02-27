@@ -51,7 +51,6 @@ export const updateWorkoutExercise = async (
     id
   );
   const result = await db.execute(updateQuery());
-  console.log(result);
   return result.rows[0] as WorkoutExercise;
 };
 
