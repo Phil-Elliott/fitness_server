@@ -30,7 +30,7 @@ export const createWorkoutExerciseSet = async (
   workoutExerciseSetData: NewWorkoutExerciseSet
 ): Promise<WorkoutExerciseSet> => {
   const result = await db.execute(
-    sql`INSERT INTO "workoutExerciseSets" (workout_exercise_id, set_number, repetitions, weight, weight_unit, user_input, created_at) VALUES (${workoutExerciseSetData.workout_exercise_id}, ${workoutExerciseSetData.set_number}, ${workoutExerciseSetData.repetitions}, ${workoutExerciseSetData.weight}, ${workoutExerciseSetData.weight_unit}, ${workoutExerciseSetData.user_input}, NOW()) RETURNING *`
+    sql`INSERT INTO "workoutExerciseSets" (workout_exercise_id, set_number, repetitions, weight, weight_unit, notes, created_at) VALUES (${workoutExerciseSetData.workout_exercise_id}, ${workoutExerciseSetData.set_number}, ${workoutExerciseSetData.repetitions}, ${workoutExerciseSetData.weight}, ${workoutExerciseSetData.weight_unit}, ${workoutExerciseSetData.notes}, NOW()) RETURNING *`
   );
 
   return result.rows[0] as WorkoutExerciseSet;

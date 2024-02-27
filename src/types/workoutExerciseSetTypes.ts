@@ -5,7 +5,7 @@ export type WorkoutExerciseSet = {
   repetitions: number;
   weight: number;
   weight_unit: string;
-  user_input: string;
+  notes: string;
   created_at: string;
 };
 
@@ -15,5 +15,5 @@ export type NewWorkoutExerciseSet = {
   repetitions: number;
   weight: number;
   weight_unit: string;
-  user_input: string;
+  notes: string;
 };

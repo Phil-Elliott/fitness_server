@@ -33,21 +33,21 @@ describe("WorkoutExerciseSet Routes", () => {
       repetitions: 10,
       weight: 100,
       weight_unit: "lbs",
-      user_input: "10 reps at 100 lbs",
+      notes: "10 reps at 100 lbs",
     },
     {
       set_number: 2,
       repetitions: 7,
       weight: 100,
       weight_unit: "lbs",
-      user_input: "10 reps at 100 lbs",
+      notes: "10 reps at 100 lbs",
     },
     {
       set_number: 3,
       repetitions: 12,
       weight: 85,
       weight_unit: "lbs",
-      user_input: "10 reps at 100 lbs",
+      notes: "10 reps at 100 lbs",
     },
   ];
 
@@ -77,28 +77,19 @@ describe("WorkoutExerciseSet Routes", () => {
 
   describe("Post /api/v1/workoutExerciseSet", () => {
     it("should create a new workoutExerciseSet", async () => {
-      const user = await db.execute(
-        sql`INSERT INTO users (clerk_user_id, email, display_name) VALUES ('553226', 'debrajohnson@gmail.com', 'Debra Johnson') RETURNING *`
-      );
-      const userId = user.rows[0].id as number;
-
-      const routine = await db.execute(
-        sql`INSERT INTO routines (user_id, name, description, created_at) VALUES (${userId}, 'Another Routine', 'Another new routine to start the day', NOW()) RETURNING *`
-      );
-      const routineId = routine.rows[0].id as number;
-
       const workout = await db.execute(
-        sql`INSERT INTO workouts (routine_id, name, description, created_at) VALUES (${routineId}, 'Fun Workout', 'A fun workout to start the day', NOW()) RETURNING *`
+        sql`INSERT INTO workouts (user_id, name, notes, date, workout_status, created_at) VALUES ('user_12543', 'New Workout', 'A workout to do something during the day', date '2026-10-18', 'finished', NOW()) RETURNING *`
       );
-      const workoutId = workout.rows[0].id as number;
+
+      const workoutId = workout.rows[0].id;
 
       const exercise = await db.execute(
-        sql`INSERT INTO exercises (name, description) VALUES ('Squats', 'A classic squat to improve leg strength') RETURNING *`
+        sql`INSERT INTO exercises (name, description) VALUES ('Push Ups', 'A classic exercise to build upper body strength') RETURNING *`
       );
       const exerciseId = exercise.rows[0].id as number;
 
       const workoutExercise = await db.execute(
-        sql`INSERT INTO "workoutExercises" (workout_id, exercise_id, order_index) VALUES (${workoutId}, ${exerciseId}, 1) RETURNING *`
+        sql`INSERT INTO "workoutExercises" (workout_id, exercise_id, order_index) VALUES (${workoutId}, ${exerciseId}, 2) returning *`
       );
       const workoutExerciseId = workoutExercise.rows[0].id as number;
 
@@ -108,7 +99,7 @@ describe("WorkoutExerciseSet Routes", () => {
         repetitions: 15,
         weight: 100,
         weight_unit: "lbs",
-        user_input: "15 reps at 100 lbs",
+        notes: "15 reps at 100 lbs",
       };
       const response = await request(app)
         .post("/api/v1/workoutExerciseSet")
@@ -134,7 +125,7 @@ describe("WorkoutExerciseSet Routes", () => {
         repetitions: 20,
         weight: 120,
         weight_unit: "kg",
-        user_input: "20 reps at 120 lbs",
+        notes: "20 reps at 120 lbs",
       };
       const response = await request(app)
         .patch(`/api/v1/workoutExerciseSet/${id}`)
@@ -162,7 +153,7 @@ describe("WorkoutExerciseSet Routes", () => {
         repetitions: 20,
         weight: 140,
         weight_unit: "kg",
-        user_input: "20 reps at 120 lbs",
+        notes: "20 reps at 120 lbs",
       });
     });
 
@@ -172,7 +163,7 @@ describe("WorkoutExerciseSet Routes", () => {
         repetitions: 20,
         weight: 190,
         weight_unit: "kg",
-        user_input: "20 reps at 120 lbs",
+        notes: "20 reps at 120 lbs",
       };
       const response = await request(app)
         .patch(`/api/v1/workoutExerciseSet/123456789`)
