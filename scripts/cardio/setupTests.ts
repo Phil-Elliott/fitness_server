@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import db from "../../src/database/setup";
 
-async function setupWorkoutTableForTestDatabase() {
+async function setupCardioTableForTestDatabase() {
   try {
     await db.execute(
       sql`INSERT INTO users (id, email, display_name) VALUES ('user_12543', 'johndoe@gmail.com', 'John Doe');`
@@ -33,7 +33,7 @@ async function setupWorkoutTableForTestDatabase() {
   }
 }
 
-export default setupWorkoutTableForTestDatabase;
+export default setupCardioTableForTestDatabase;
 
 /*
 - use same user id

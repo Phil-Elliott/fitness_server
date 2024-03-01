@@ -8,7 +8,7 @@ async function teardownWorkoutTableForTestDatabase() {
     await db.execute(sql`DELETE FROM users`);
   } catch (error) {
     console.error(
-      "Error tearing down workout table in test database workout:",
+      "Error tearing down workout table in test database templateWorkout:",
       error
     );
   }

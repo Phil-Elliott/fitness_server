@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import db from "../../src/database/setup";
 
-async function teardownWorkoutExerciseTableForTestDatabase() {
+async function teardownWorkoutExerciseSetTableForTestDatabase() {
   try {
     await db.execute(sql`DELETE FROM "workoutExerciseSets"`);
     await db.execute(sql`DELETE FROM "workoutExercises"`);
@@ -17,4 +17,4 @@ async function teardownWorkoutExerciseTableForTestDatabase() {
   }
 }
 
-export default teardownWorkoutExerciseTableForTestDatabase;
+export default teardownWorkoutExerciseSetTableForTestDatabase;

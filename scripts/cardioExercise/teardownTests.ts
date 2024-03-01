@@ -1,15 +1,15 @@
 import { sql } from "drizzle-orm";
 import db from "../../src/database/setup";
 
-async function teardownExerciseTableForTestDatabase() {
+async function teardownCardioExerciseTableForTestDatabase() {
   try {
     await db.execute(sql`DELETE FROM "cardioExercises"`);
   } catch (error) {
     console.error(
-      "Error tearing down cardioExercise table in test database cardioExercise:",
+      "Error tearing down cardioExercise table in test database:",
       error
     );
   }
 }
 
-export default teardownExerciseTableForTestDatabase;
+export default teardownCardioExerciseTableForTestDatabase;
