@@ -27,6 +27,11 @@ app.use("/api/v1/routine", ClerkExpressRequireAuth(), routes.routineRoutes);
 app.use("/api/v1/workout", ClerkExpressRequireAuth(), routes.workoutRoutes);
 app.use("/api/v1/cardio", ClerkExpressRequireAuth(), routes.cardioRoutes);
 app.use(
+  "/api/v1/templateCardio",
+  ClerkExpressRequireAuth(),
+  routes.templateCardioRoutes
+);
+app.use(
   "/api/v1/workoutExercise",
   ClerkExpressRequireAuth(),
   routes.workoutExerciseRoutes
