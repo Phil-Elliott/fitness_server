@@ -1,5 +1,6 @@
 import cardioRoutes from "./cardioRoutes";
 import templateCardioRoutes from "./templateCardioRoutes";
+import templateWorkoutRoutes from "./templateWorkoutRoutes";
 import workoutCardioRoutes from "./workoutCardioRoutes";
 import cardioExerciseRoutes from "./cardioExerciseRoutes";
 import exerciseRoutes from "./exerciseRoutes";
@@ -12,6 +13,7 @@ import workoutRoutes from "./workoutRoutes";
 export {
   cardioRoutes,
   templateCardioRoutes,
+  templateWorkoutRoutes,
   workoutCardioRoutes,
   cardioExerciseRoutes,
   exerciseRoutes,

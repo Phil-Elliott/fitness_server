@@ -24,6 +24,11 @@ app.use(cookieParser());
 
 app.use("/api/v1/user", ClerkExpressRequireAuth(), routes.userRoutes);
 app.use("/api/v1/routine", ClerkExpressRequireAuth(), routes.routineRoutes);
+app.use(
+  "/api/v1/templateWorkout",
+  ClerkExpressRequireAuth(),
+  routes.templateWorkoutRoutes
+);
 app.use("/api/v1/workout", ClerkExpressRequireAuth(), routes.workoutRoutes);
 app.use("/api/v1/cardio", ClerkExpressRequireAuth(), routes.cardioRoutes);
 app.use(
