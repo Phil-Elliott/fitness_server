@@ -24,7 +24,7 @@ export const templateSchedules = pgTable("templateSchedules", {
   ),
   day_of_week: daysOfWeekEnum("day_of_week"),
   start_time: time("start_time", { withTimezone: true }),
-  end_time: time("start_time", { withTimezone: true }),
+  end_time: time("end_time", { withTimezone: true }),
 });
 
 // Could maybe add up the projected end time based off of rests given and i could also show time remaining for the workout while the user is working out

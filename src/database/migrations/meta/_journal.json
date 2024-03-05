@@ -155,6 +155,13 @@
       "when": 1708859428844,
       "tag": "0021_nosy_marauders",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1709619589482,
+      "tag": "0022_nifty_squadron_sinister",
+      "breakpoints": true
     }
   ]
 }

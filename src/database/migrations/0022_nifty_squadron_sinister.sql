@@ -1,0 +1,1 @@
+ALTER TABLE "templateSchedules" ADD COLUMN "end_time" time with time zone;
