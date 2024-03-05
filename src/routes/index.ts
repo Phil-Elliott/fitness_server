@@ -1,29 +1,34 @@
-import cardioRoutes from "./cardioRoutes";
+import userRoutes from "./userRoutes";
+
+import templateWorkoutRoutes from "./templateWorkoutRoutes";
 import templateCardioRoutes from "./templateCardioRoutes";
 import templateWorkoutCardioRoutes from "./templateWorkoutCardioRoutes";
-import templateWorkoutRoutes from "./templateWorkoutRoutes";
 import templateWorkoutExerciseRoutes from "./templateWorkoutExerciseRoutes";
-import workoutCardioRoutes from "./workoutCardioRoutes";
-import cardioExerciseRoutes from "./cardioExerciseRoutes";
-import exerciseRoutes from "./exerciseRoutes";
+import templateScheduleRoutes from "./templateScheduleRoutes";
+
 import routineRoutes from "./routineRoutes";
-import userRoutes from "./userRoutes";
+import workoutRoutes from "./workoutRoutes";
+import workoutCardioRoutes from "./workoutCardioRoutes";
 import workoutExerciseRoutes from "./workoutExerciseRoutes";
 import workoutExerciseSetRoutes from "./workoutExerciseSetRoutes";
-import workoutRoutes from "./workoutRoutes";
+import cardioRoutes from "./cardioRoutes";
+
+import exerciseRoutes from "./exerciseRoutes";
+import cardioExerciseRoutes from "./cardioExerciseRoutes";
 
 export {
-  cardioRoutes,
+  userRoutes,
+  templateWorkoutRoutes,
   templateCardioRoutes,
   templateWorkoutCardioRoutes,
-  templateWorkoutRoutes,
   templateWorkoutExerciseRoutes,
-  workoutCardioRoutes,
-  cardioExerciseRoutes,
-  exerciseRoutes,
+  templateScheduleRoutes,
   routineRoutes,
-  userRoutes,
-  workoutExerciseRoutes,
   workoutRoutes,
+  workoutCardioRoutes,
+  workoutExerciseRoutes,
   workoutExerciseSetRoutes,
+  cardioRoutes,
+  exerciseRoutes,
+  cardioExerciseRoutes,
 };
