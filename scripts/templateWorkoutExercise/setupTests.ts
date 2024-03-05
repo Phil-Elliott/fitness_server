@@ -13,11 +13,10 @@ async function setupTemplateWorkoutExerciseTableForTestDatabase() {
 
     const routineId = routine.rows[0].id;
 
-    const workout = await db.execute(
-      sql`INSERT INTO workouts (user_id, routine_id, name, notes, date, workout_status, created_at) VALUES ('user_12543', ${routineId}, 'Morning Workout', 'A workout to start the day', date '2024-02-26', 'incomplete', NOW()) RETURNING *`
+    const templateWorkout = await db.execute(
+      sql`INSERT INTO "templateWorkouts" (user_id, routine_id, name, notes, rest_between_exercises, template_workout_status, frequency, duration_type, duration) VALUES ('user_12543', ${routineId}, 'Morning Workout', 'A workout to start the day', 60, 'active', 'daily', 'days', 10) RETURNING *;`
     );
-
-    const workoutId = workout.rows[0].id;
+    const templateWorkoutId = templateWorkout.rows[0].id as number;
 
     const exercise = await db.execute(
       sql`INSERT INTO exercises (name, description) VALUES ('Push Ups', 'A classic exercise to build upper body strength') RETURNING *`
@@ -25,17 +24,17 @@ async function setupTemplateWorkoutExerciseTableForTestDatabase() {
     const exerciseId = exercise.rows[0].id as number;
 
     await db.execute(
-      sql`INSERT INTO "templateWorkoutExercises" (workout_id, exercise_id, order_index) VALUES (${workoutId}, ${exerciseId}, 1);`
+      sql`INSERT INTO "templateWorkoutExercises" (template_workout_id, exercise_id, order_index, sets, rest_between_sets) VALUES (${templateWorkoutId}, ${exerciseId}, 1, 3, 60);`
     );
     await db.execute(
-      sql`INSERT INTO "templateWorkoutExercises" (workout_id, exercise_id, order_index) VALUES (${workoutId}, ${exerciseId}, 2);`
+      sql`INSERT INTO "templateWorkoutExercises" (template_workout_id, exercise_id, order_index, sets, rest_between_sets) VALUES (${templateWorkoutId}, ${exerciseId}, 2, 10, 90);`
     );
     await db.execute(
-      sql`INSERT INTO "templateWorkoutExercises" (workout_id, exercise_id, order_index) VALUES (${workoutId}, ${exerciseId}, 3);`
+      sql`INSERT INTO "templateWorkoutExercises" (template_workout_id, exercise_id, order_index, sets, rest_between_sets) VALUES (${templateWorkoutId}, ${exerciseId}, 3, 4, 120);`
     );
   } catch (error) {
     console.error(
-      "Error setting up WorkoutExercise table in test database:",
+      "Error setting up templateWorkoutExercise table in test database:",
       error
     );
   }
